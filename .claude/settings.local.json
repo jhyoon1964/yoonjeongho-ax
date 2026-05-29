@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \".claude\" && python --version)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(python -c \"from PIL import Image; print\\('Pillow', Image.__version__ if hasattr\\(Image,'__version__'\\) else 'ok'\\)\")",
+      "Bash(npm --version)",
+      "Bash(npx vercel *)",
+      "Bash(cat .vercel/README.txt)",
+      "Bash(vercel --version)",
+      "Bash(curl -s -o /dev/null -w \"HTTP 상태코드: %{http_code}\\\\n\" https://yoonjeongho-ax.vercel.app)",
+      "Bash(curl -s https://yoonjeongho-ax.vercel.app)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

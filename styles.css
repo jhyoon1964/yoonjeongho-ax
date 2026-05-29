@@ -1,0 +1,1352 @@
+/* ============================================================
+   AX 강사 소개 페이지 — 메인 스타일시트
+   컨셉: 신뢰감 있는 전문가 스타일 (딥블루 + ESG 그린)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. Design Tokens (디자인 변수)
+   ------------------------------------------------------------ */
+:root {
+    /* Colors */
+    --color-primary: #14315F;         /* 딥블루 - 메인 (자동차/엔지니어링) */
+    --color-primary-light: #2C5AA0;
+    --color-primary-dark: #0B1F40;
+    --color-accent: #1FA968;          /* 그린 - 포인트 (ESG) */
+    --color-accent-light: #2EC97F;
+
+    --color-text: #1A202C;
+    --color-text-secondary: #4A5568;
+    --color-text-muted: #718096;
+
+    --color-bg: #FFFFFF;
+    --color-bg-alt: #F7F9FC;
+    --color-bg-dark: #14315F;
+
+    --color-border: #E2E8F0;
+    --color-border-light: #EDF2F7;
+
+    /* Typography */
+    --font-base: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+    /* Spacing */
+    --container-max: 1200px;
+    --section-padding-y: 6rem;
+    --section-padding-y-mobile: 4rem;
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* Shadow */
+    --shadow-sm: 0 1px 3px rgba(20, 49, 95, 0.06);
+    --shadow-md: 0 4px 12px rgba(20, 49, 95, 0.08);
+    --shadow-lg: 0 10px 30px rgba(20, 49, 95, 0.12);
+
+    /* Transition */
+    --transition: 0.2s ease;
+}
+
+/* ------------------------------------------------------------
+   2. Reset & Base
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+}
+
+body {
+    font-family: var(--font-base);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 한국어 어절 단위 줄바꿈 — "엔지니어가"가 "엔지니어"+"가"로 쪼개지지 않게 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+/* 키보드 포커스 시각화 (접근성) */
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ------------------------------------------------------------
+   3. Layout Helpers
+   ------------------------------------------------------------ */
+main > section {
+    padding: var(--section-padding-y) 1.5rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+}
+
+main > section:nth-of-type(even) {
+    max-width: none;
+}
+
+main > section:nth-of-type(even) > * {
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+    font-size: 1.0625rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 3rem;
+}
+
+/* ------------------------------------------------------------
+   4. [nav-global] 글로벌 네비게이션
+   ------------------------------------------------------------ */
+#nav-global {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(10px); /* Safari */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border-light);
+    height: 72px;
+}
+
+/* 모바일 햄버거 버튼 (PC에서는 숨김) */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0.5rem;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-primary);
+    transition: transform var(--transition), opacity var(--transition);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+#nav-global nav {
+    max-width: var(--container-max);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.nav-logo a {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-menu a {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.nav-menu a:hover {
+    color: var(--color-primary);
+}
+
+.nav-cta a {
+    display: inline-block;
+    padding: 0.625rem 1.25rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+    white-space: nowrap;
+}
+
+.nav-cta a:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ------------------------------------------------------------
+   5. [section-hero] 메인 비주얼
+   ------------------------------------------------------------ */
+#section-hero {
+    padding-top: 5rem;
+    padding-bottom: 6rem;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--color-primary);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+}
+
+.hero-subtitle {
+    font-size: 1.1875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 3rem;
+}
+
+/* Hero 숫자 지표 카드 (4개) */
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    max-width: 960px;
+    margin: 0 auto 3rem;
+}
+
+.hero-stat {
+    padding: 2rem 1rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.hero-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.hero-stat-number {
+    display: block;
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.hero-stat-accent .hero-stat-number {
+    color: var(--color-accent);
+}
+
+.hero-stat-label {
+    display: block;
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+/* Hero CTA 버튼 */
+.hero-cta-group {
+    display: flex;
+    gap: 0.875rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    display: inline-block;
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: #fff;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+/* ------------------------------------------------------------
+   6. [section-about] 강사 소개
+   ------------------------------------------------------------ */
+#section-about {
+    background: var(--color-bg-alt);
+}
+
+.about-wrapper {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.about-photo {
+    width: 280px;
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.about-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.about-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.about-title {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+}
+
+.about-bio {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.75rem;
+}
+
+.about-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.about-links a {
+    padding: 0.5rem 1rem;
+    background: #fff;
+    color: var(--color-primary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+}
+
+.about-links a:hover {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+/* ------------------------------------------------------------
+   7. [section-expertise] 전문 분야
+   ------------------------------------------------------------ */
+#section-expertise {
+    text-align: center;
+}
+
+.expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.expertise-card {
+    padding: 2rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition);
+}
+
+.expertise-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.expertise-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+}
+
+.expertise-card:nth-child(2) .expertise-icon {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+}
+
+.expertise-card-title {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+}
+
+.expertise-card-desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+
+/* ------------------------------------------------------------
+   8. [section-career] 경력
+   ------------------------------------------------------------ */
+#section-career {
+    background: var(--color-bg-alt);
+}
+
+/* 경력 하이라이트 (35년 + 2년 병렬) */
+.career-highlight {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.career-highlight-card {
+    padding: 2.5rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--color-primary);
+    position: relative;
+}
+
+.career-highlight-card:nth-child(2) {
+    border-left-color: var(--color-accent);
+}
+
+.career-highlight-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.career-highlight-card:nth-child(2) .career-highlight-tag {
+    background: var(--color-accent);
+}
+
+.career-highlight-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.career-highlight-duration {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+}
+
+.career-highlight-card:nth-child(2) .career-highlight-duration {
+    color: var(--color-accent);
+}
+
+.career-highlight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.career-highlight-list li {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    padding-left: 1rem;
+    position: relative;
+}
+
+.career-highlight-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+}
+
+.career-highlight-card:nth-child(2) .career-highlight-list li::before {
+    color: var(--color-accent);
+}
+
+/* 타임라인 */
+.career-subtitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+}
+
+.career-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.career-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--color-primary);
+}
+
+.career-year {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.career-detail .career-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+}
+
+.career-detail .career-desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------------
+   9. [section-curriculum] 커리큘럼
+   ------------------------------------------------------------ */
+/* 커리큘럼 카드 그리드 */
+.curriculum-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.curriculum-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition);
+}
+
+.curriculum-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.curriculum-card-title {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.curriculum-objectives {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    flex: 1;
+}
+
+.curriculum-objectives li {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+}
+
+.curriculum-objectives li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.curriculum-detail-btn {
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: 1.5px solid var(--color-primary);
+    color: var(--color-primary);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+}
+
+.curriculum-detail-btn:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+/* 커리큘럼 모달 (구조만, 기본 hidden) */
+.curriculum-modal[hidden] {
+    display: none;
+}
+
+.curriculum-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+}
+
+.modal-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 1.5rem 0 0.75rem;
+}
+
+.modal-content ol,
+.modal-content ul {
+    padding-left: 1.5rem;
+}
+
+.modal-content ol li,
+.modal-content ul li {
+    margin-bottom: 0.375rem;
+    color: var(--color-text-secondary);
+}
+
+.modal-content ol {
+    list-style: decimal;
+}
+
+.modal-content ul {
+    list-style: disc;
+}
+
+.modal-cta {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+}
+
+/* 차시별 목차 표 */
+.modal-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-light);
+}
+
+.modal-syllabus-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+}
+
+.modal-syllabus-table thead th {
+    background: var(--color-bg-alt);
+    color: var(--color-primary);
+    font-weight: 700;
+    padding: 0.75rem 0.875rem;
+    text-align: left;
+    border-bottom: 2px solid var(--color-primary);
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.modal-syllabus-table tbody td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.55;
+}
+
+.modal-syllabus-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.modal-syllabus-table tbody td:first-child {
+    font-weight: 700;
+    color: var(--color-primary);
+    white-space: nowrap;
+    width: 60px;
+}
+
+.modal-syllabus-table tbody td:nth-child(2) {
+    color: var(--color-accent);
+    font-weight: 600;
+    white-space: nowrap;
+    width: 60px;
+}
+
+/* 사전 요구 지식 / 추천 수강 대상 박스 */
+.modal-info-box {
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-accent);
+    padding: 0.875rem 1.125rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-bottom: 1.25rem;
+    line-height: 1.65;
+}
+
+/* ------------------------------------------------------------
+  10. [section-contact] 문의
+   ------------------------------------------------------------ */
+#section-contact {
+    text-align: center;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-row label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    padding: 0.75rem 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--color-text);
+    background: #fff;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition);
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.form-row textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-submit {
+    padding: 1rem 2rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+    margin-top: 0.5rem;
+}
+
+.form-submit:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ------------------------------------------------------------
+  12. [section-footer] 푸터
+   ------------------------------------------------------------ */
+#section-footer {
+    background: var(--color-primary-dark);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 3rem 1.5rem 2rem;
+}
+
+.footer-wrapper {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.footer-copyright,
+.footer-contact {
+    font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------------
+  13. Responsive — Tablet (1024px 이하)
+   ------------------------------------------------------------ */
+@media (max-width: 1024px) {
+    .expertise-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* ------------------------------------------------------------
+  14. Responsive — Mobile (768px 이하)
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+    main > section {
+        padding: var(--section-padding-y-mobile) 1.25rem;
+    }
+
+    /* Nav */
+    .nav-menu {
+        display: none;
+    }
+
+    /* Hero */
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .hero-stat {
+        padding: 1.5rem;
+    }
+
+    .hero-stat-number {
+        font-size: 2.25rem;
+    }
+
+    /* About */
+    .about-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .about-photo {
+        margin: 0 auto;
+        width: 200px;
+        height: 200px;
+    }
+
+    .about-links {
+        justify-content: center;
+    }
+
+    /* Section title */
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    /* Expertise */
+    .expertise-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Career */
+    .career-highlight {
+        grid-template-columns: 1fr;
+    }
+
+    .career-highlight-duration {
+        font-size: 2rem;
+    }
+
+    .career-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    /* Curriculum */
+    .curriculum-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Footer */
+    .footer-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* ============================================================
+   15. 실데이터 적용 후 추가 스타일
+   ============================================================ */
+
+/* Nav 로고 서브텍스트 */
+.nav-logo-sub {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+}
+
+/* Hero eyebrow (작은 배지) */
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 1.75rem;
+}
+
+.hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 10px var(--color-accent);
+}
+
+/* Hero 멀티라인 타이틀 */
+.hero-title-line { display: block; }
+.hero-title-num,
+.hero-title-accent { color: var(--color-accent); font-weight: 800; }
+
+/* Hero stat number 안의 small 단위 */
+.hero-stat-number small {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-left: 0.125rem;
+}
+
+/* ===== [section-story] 왜 이 강사인가 ===== */
+#section-story {
+    background: var(--color-bg-alt);
+    text-align: center;
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+    text-align: left;
+}
+
+.story-card {
+    padding: 2rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition), border-color var(--transition);
+}
+
+.story-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent);
+}
+
+.story-step {
+    font-size: 0.9375rem;
+    font-style: italic;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.story-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+}
+
+.story-card-desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+
+/* ===== Expertise — M/E/A 레터 아이콘 ===== */
+.expertise-icon-letter {
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    font-style: italic;
+    font-family: Georgia, 'Nanum Myeongjo', serif;
+}
+
+/* ===== Career — 전문영역 + 강의형태 태그 ===== */
+.career-tags-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 3rem 0;
+    padding: 2rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+}
+
+.career-tag-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.career-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.career-tag {
+    padding: 0.5rem 0.875rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+/* ===== Curriculum — Program 카드 추가 요소 ===== */
+.curriculum-card-number {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+    font-style: italic;
+}
+
+.curriculum-card-who {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
+    background: rgba(31, 169, 104, 0.1);
+    color: var(--color-accent);
+    border: 1px solid rgba(31, 169, 104, 0.25);
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    width: fit-content;
+}
+
+/* ===== Contact — 프로세스 단계 + 칩 ===== */
+.contact-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.contact-step {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 0.875rem;
+}
+
+.contact-step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(31, 169, 104, 0.12);
+    border: 1px solid rgba(31, 169, 104, 0.3);
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    display: grid;
+    place-items: center;
+}
+
+.contact-step-text {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.contact-step-arrow {
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+}
+
+.contact-chips {
+    display: flex;
+    justify-content: center;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.contact-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1.5rem;
+    background: #fff;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all var(--transition);
+}
+
+.contact-chip:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.contact-chip-key {
+    color: var(--color-accent);
+}
+
+/* 폼 토글 (details/summary) */
+.contact-form-toggle {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.contact-form-toggle summary {
+    cursor: pointer;
+    padding: 1rem;
+    text-align: center;
+    color: var(--color-primary);
+    font-weight: 600;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    list-style: none;
+}
+
+.contact-form-toggle summary::-webkit-details-marker { display: none; }
+.contact-form-toggle summary::before { content: '＋  '; color: var(--color-accent); }
+.contact-form-toggle[open] summary::before { content: '－  '; }
+
+/* ===== Footer — 새 구조 (brand/tagline/contact) ===== */
+.footer-brand {
+    font-weight: 800;
+    color: #fff;
+    font-size: 1.0625rem;
+    margin-bottom: 0.25rem;
+}
+
+.footer-tagline {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 0.75rem;
+}
+
+.footer-wrapper {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+.footer-wrapper a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: underline;
+}
+
+/* ===== 반응형 추가 ===== */
+@media (max-width: 1024px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .story-grid { grid-template-columns: 1fr; }
+    .career-tags-section { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .hero-title { font-size: 1.65rem; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .contact-steps {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .contact-step-arrow {
+        transform: rotate(90deg);
+        margin-left: 1rem;
+    }
+    .contact-chips { flex-direction: column; }
+    .contact-chip {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* 햄버거로 펼친 모바일 메뉴 */
+    .nav-toggle { display: flex; }
+    .nav-menu.is-open {
+        display: flex;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: #fff;
+        padding: 0.5rem 1.5rem;
+        box-shadow: var(--shadow-md);
+        border-top: 1px solid var(--color-border-light);
+    }
+    .nav-menu.is-open li {
+        padding: 0.875rem 0;
+        border-bottom: 1px solid var(--color-border-light);
+    }
+    .nav-menu.is-open li:last-child { border-bottom: none; }
+}
+
+/* 폼 제출 성공 메시지 */
+.form-success {
+    margin-top: 1rem;
+    padding: 0.875rem 1rem;
+    background: rgba(31, 169, 104, 0.1);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-align: center;
+}
+
