@@ -443,15 +443,35 @@ main > section:nth-of-type(even) > * {
 }
 
 .expertise-icon {
-    width: 48px;
-    height: 48px;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-    border-radius: var(--radius-sm);
+    border-radius: 15px;
     margin-bottom: 1.25rem;
+    box-shadow: 0 8px 18px rgba(20, 49, 95, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.expertise-icon svg {
+    width: 27px;
+    height: 27px;
+    color: #fff;
 }
 
 .expertise-card:nth-child(2) .expertise-icon {
     background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    box-shadow: 0 8px 18px rgba(31, 169, 104, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.expertise-card:hover .expertise-icon {
+    transform: translateY(-3px) rotate(-3deg);
+    box-shadow: 0 12px 24px rgba(20, 49, 95, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.expertise-card:nth-child(2):hover .expertise-icon {
+    box-shadow: 0 12px 24px rgba(31, 169, 104, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .expertise-card-title {
@@ -1098,17 +1118,6 @@ main > section:nth-of-type(even) > * {
     font-size: 0.9375rem;
     color: var(--color-text-secondary);
     line-height: 1.7;
-}
-
-/* ===== Expertise — M/E/A 레터 아이콘 ===== */
-.expertise-icon-letter {
-    display: grid;
-    place-items: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    font-style: italic;
-    font-family: Georgia, 'Nanum Myeongjo', serif;
 }
 
 /* ===== Career — 전문영역 + 강의형태 태그 ===== */
