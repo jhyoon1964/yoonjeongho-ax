@@ -192,9 +192,34 @@ main > section:nth-of-type(even) > * {
 }
 
 .nav-logo a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-primary);
+}
+
+.nav-logo-mark {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(20, 49, 95, 0.22);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-logo-mark svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.nav-logo a:hover .nav-logo-mark {
+    transform: translateY(-1px) rotate(-4deg);
+    box-shadow: 0 5px 12px rgba(20, 49, 95, 0.30);
 }
 
 .nav-menu {

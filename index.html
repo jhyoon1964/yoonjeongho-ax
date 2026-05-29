@@ -60,7 +60,25 @@
     <header id="nav-global">
         <nav>
             <div class="nav-logo">
-                <a href="#section-hero">윤정호 <span class="nav-logo-sub">· AX Lecturer</span></a>
+                <a href="#section-hero">
+                    <span class="nav-logo-mark" aria-hidden="true">
+                        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="navlogo-bg" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0" stop-color="#14315F"/>
+                                    <stop offset="1" stop-color="#2C5AA0"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="64" height="64" rx="15" fill="url(#navlogo-bg)"/>
+                            <g transform="translate(14,12) scale(1.5)" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                            </g>
+                            <circle cx="47" cy="20" r="4.5" fill="#2EC97F"/>
+                        </svg>
+                    </span>
+                    <span class="nav-logo-text">윤정호 <span class="nav-logo-sub">· AX Lecturer</span></span>
+                </a>
             </div>
             <ul class="nav-menu">
                 <li><a href="#section-about">소개</a></li>
