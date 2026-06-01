@@ -1,6 +1,12 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "yoonjeongho-ax.vercel.app" }],
+      "destination": "https://yoonjungho.vercel.app/",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "yoonjeongho-ax.vercel.app" }],
       "destination": "https://yoonjungho.vercel.app/:path*",
