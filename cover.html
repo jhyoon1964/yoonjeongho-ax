@@ -66,17 +66,32 @@
   .eyebrow .led{width:8px;height:8px;border-radius:50%;background:var(--cyan);
     box-shadow:0 0 12px var(--cyan),0 0 24px var(--cyan);}
 
-  .title{margin-top:28px;text-align:center;line-height:.96;}
+  .title{margin-top:28px;text-align:center;line-height:.96;position:relative;}
+  /* 제목 가독성용 어두운 스크림 — 밝은 코어 위에서 글자 분리 */
+  .title::before{
+    content:"";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
+    width:560px;height:600px;z-index:-1;pointer-events:none;
+    background:radial-gradient(56% 50% at 50% 50%,
+      rgba(3,7,20,.78) 0%,rgba(3,7,20,.55) 48%,rgba(3,7,20,.22) 68%,transparent 80%);
+    filter:blur(10px);
+  }
   .title .ai{
     font-size:230px;font-weight:900;letter-spacing:-6px;
     background:linear-gradient(180deg,#ffffff 0%,#bfe6ff 45%,#4cc6ff 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 0 40px rgba(76,198,255,.65)) drop-shadow(0 0 90px rgba(59,130,246,.5));
+    filter:drop-shadow(0 3px 14px rgba(0,6,20,.9))
+           drop-shadow(0 0 40px rgba(76,198,255,.65))
+           drop-shadow(0 0 90px rgba(59,130,246,.5));
     display:block;
   }
   .title .kr{
     font-size:118px;font-weight:900;letter-spacing:-2px;color:#f4f8ff;
-    text-shadow:0 0 30px rgba(120,170,255,.45);margin-top:-6px;display:block;
+    -webkit-text-stroke:1px rgba(8,16,34,.55);
+    text-shadow:
+      0 2px 16px rgba(2,6,18,.92),
+      0 0 6px rgba(2,6,18,.85),
+      0 0 32px rgba(120,170,255,.45);
+    margin-top:-6px;display:block;
   }
   .with{margin-top:30px;font-size:26px;font-weight:700;color:#cfe0ff;letter-spacing:.5px;}
   .with b{color:var(--cyan);}
