@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 격차 — 윤정호 | 도서 구매</title>
+<meta name="description" content="현대차 36년 엔지니어가 풀어내는 실전 AI. 새로운 동료 AI 에이전트와 일하는 법부터 산업을 바꾸는 새로운 혁명까지 — 『AI 격차』">
+<style>
+  :root{
+    --bg:#070b18; --bg2:#0a1124; --panel:#0e1730;
+    --cyan:#39d8ff; --blue:#3b82f6; --violet:#8b5cf6;
+    --gold:#ffd25e; --green:#34d399;
+    --cream:#f3f6ff; --muted:#9fb0d4; --line:rgba(120,170,255,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Pretendard','Malgun Gothic','맑은 고딕',sans-serif;
+    background:var(--bg); color:var(--cream); line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  .sr-only{position:absolute;left:-9999px;}
+
+  /* ===== 버튼 ===== */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-weight:800;border-radius:12px;cursor:pointer;border:none;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-buy{
+    background:linear-gradient(120deg,#39d8ff,#3b82f6);
+    color:#06122b;font-size:18px;padding:16px 34px;
+    box-shadow:0 10px 30px rgba(57,216,255,.35);
+  }
+  .btn-buy:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(57,216,255,.5);}
+  .btn-ghost{
+    background:transparent;color:var(--cream);border:1.5px solid rgba(159,176,212,.5);
+    font-size:16px;padding:14px 26px;
+  }
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+
+  /* ===== 상단 고정 네비 ===== */
+  .nav{
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(7,11,24,.82);border-bottom:1px solid var(--line);
+  }
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .logo{font-weight:900;font-size:20px;letter-spacing:-.5px;}
+  .logo .ai{color:var(--cyan);}
+  .nav-links{display:flex;gap:26px;align-items:center;font-size:15px;color:var(--muted);}
+  .nav-links a:hover{color:var(--cream);}
+  .nav .btn-buy{font-size:15px;padding:11px 22px;}
+  @media(max-width:820px){.nav-links{display:none;}}
+
+  /* ===== 히어로 ===== */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(59,130,246,.25), transparent 55%),
+      radial-gradient(80% 60% at 85% 20%, rgba(139,92,246,.18), transparent 60%),
+      linear-gradient(180deg,#0a1124,#070b18);
+    padding:70px 0 80px;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1fr 360px;gap:54px;align-items:center;}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;color:#cdeeff;
+    border:1px solid rgba(57,216,255,.4);background:rgba(57,216,255,.07);
+    padding:7px 16px;border-radius:999px;margin-bottom:22px;
+  }
+  .badge .led{width:8px;height:8px;border-radius:50%;background:var(--cyan);
+    box-shadow:0 0 10px var(--cyan);}
+  .hero h1{font-size:54px;line-height:1.15;letter-spacing:-1.5px;font-weight:900;}
+  .hero h1 .ai{
+    background:linear-gradient(120deg,#bfe6ff,#39d8ff);
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .lead{margin-top:20px;font-size:19px;color:#c4d2ee;max-width:520px;}
+  .hero .meta-row{margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;font-size:15px;color:var(--muted);}
+  .hero .meta-row b{color:var(--cream);}
+  .price{margin-top:30px;display:flex;align-items:baseline;gap:12px;}
+  .price .now{font-size:34px;font-weight:900;color:#fff;}
+  .price .was{font-size:18px;color:#7e8fb3;text-decoration:line-through;}
+  .price .off{font-size:15px;font-weight:800;color:var(--gold);
+    background:rgba(255,210,94,.12);padding:4px 10px;border-radius:8px;}
+  .cta-row{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;}
+  .cover-card{
+    justify-self:center;position:relative;
+  }
+  .cover-card img{
+    width:340px;border-radius:14px;display:block;
+    box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px rgba(120,170,255,.18);
+  }
+  .cover-card::after{
+    content:"";position:absolute;inset:-30px;z-index:-1;
+    background:radial-gradient(circle,rgba(57,216,255,.3),transparent 65%);filter:blur(20px);
+  }
+  @media(max-width:820px){
+    .hero .wrap{grid-template-columns:1fr;text-align:center;}
+    .hero h1{font-size:38px;}
+    .badge,.price,.cta-row,.meta-row{justify-content:center;}
+    .cover-card{order:-1;}
+    .cover-card img{width:260px;}
+  }
+
+  /* ===== 섹션 공통 ===== */
+  section{padding:78px 0;}
+  .eyebrow{color:var(--cyan);font-weight:800;font-size:14px;letter-spacing:2px;
+    text-transform:uppercase;margin-bottom:12px;}
+  .sec-title{font-size:34px;font-weight:900;letter-spacing:-1px;}
+  .sec-sub{margin-top:14px;color:var(--muted);font-size:17px;}
+
+  /* 이 책은 */
+  .pitch-card{
+    background:linear-gradient(135deg,rgba(57,216,255,.08),rgba(139,92,246,.06));
+    border:1px solid var(--line);border-radius:20px;padding:46px;text-align:center;
+  }
+  .pitch-card .big{font-size:30px;font-weight:900;line-height:1.45;letter-spacing:-.5px;}
+  .pitch-card .big .g{color:var(--gold);}
+  .pitch-card p{margin-top:18px;color:#c4d2ee;font-size:18px;}
+
+  /* 타깃 독자 */
+  .reader-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px;}
+  .reader{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;}
+  .reader .ico{font-size:30px;}
+  .reader h3{margin-top:14px;font-size:18px;font-weight:800;}
+  .reader p{margin-top:8px;color:var(--muted);font-size:15px;}
+  @media(max-width:820px){.reader-grid{grid-template-columns:1fr;}}
+
+  /* 목차 */
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px;}
+  .ch{display:flex;gap:18px;background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;padding:22px;transition:border-color .15s,transform .15s;}
+  .ch:hover{border-color:rgba(57,216,255,.45);transform:translateY(-2px);}
+  .ch .no{font-size:26px;font-weight:900;color:var(--cyan);min-width:46px;line-height:1;}
+  .ch h4{font-size:17px;font-weight:800;}
+  .ch p{margin-top:6px;color:var(--muted);font-size:14px;}
+  @media(max-width:820px){.toc{grid-template-columns:1fr;}}
+
+  /* 저자 */
+  .author{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px;}
+  .author img{width:200px;height:200px;object-fit:cover;border-radius:16px;
+    box-shadow:0 0 0 1px rgba(120,170,255,.25);}
+  .author h3{font-size:26px;font-weight:900;}
+  .author .role{color:var(--cyan);font-weight:700;margin-top:6px;}
+  .author ul{margin-top:16px;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .author li{padding-left:20px;position:relative;color:#c4d2ee;}
+  .author li::before{content:"›";position:absolute;left:0;color:var(--cyan);font-weight:900;}
+  @media(max-width:820px){.author{grid-template-columns:1fr;text-align:center;}
+    .author img{margin:0 auto;}.author ul{text-align:left;}}
+
+  /* 최종 CTA */
+  .final{
+    background:radial-gradient(100% 120% at 50% 0%, rgba(59,130,246,.25), transparent 60%),
+      linear-gradient(180deg,#0a1124,#070b18);
+    border-top:1px solid var(--line);text-align:center;
+  }
+  .final h2{font-size:40px;font-weight:900;letter-spacing:-1px;}
+  .final h2 .g{color:var(--gold);}
+  .final p{margin-top:16px;color:#c4d2ee;font-size:18px;}
+  .stores{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .store{padding:13px 22px;border-radius:10px;border:1px solid rgba(159,176,212,.4);
+    font-weight:700;font-size:15px;color:#c4d2ee;}
+  .store:hover{border-color:var(--cyan);color:var(--cyan);}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;color:#6f80a6;font-size:14px;text-align:center;}
+
+  /* 모바일 하단 고정 구매바 */
+  .buybar{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+    background:rgba(7,11,24,.95);border-top:1px solid var(--line);
+    padding:12px 16px;backdrop-filter:blur(10px);
+    align-items:center;justify-content:space-between;gap:12px;
+  }
+  .buybar .p{font-weight:900;font-size:18px;}
+  .buybar .btn-buy{flex:1;padding:14px;}
+  @media(max-width:820px){.buybar{display:flex;} body{padding-bottom:74px;}}
+
+  /* ===== 로그인한 회원 표시 (네비) ===== */
+  .nav-user{display:flex;gap:14px;align-items:center;}
+  .nav-user[hidden]{display:none;}
+  .nav-user .email{font-size:14px;color:#cdeeff;font-weight:700;}
+  .nav-linkbtn{font-size:14px;color:var(--muted);cursor:pointer;font-weight:700;}
+  .nav-linkbtn:hover{color:var(--cyan);}
+
+  /* ===== 모달(팝업) 공통 ===== */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:100;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    background:rgba(3,6,14,.72);backdrop-filter:blur(6px);
+  }
+  .modal-overlay.show{display:flex;}
+  .modal{
+    width:100%;max-width:420px;background:linear-gradient(180deg,#0e1730,#0a1124);
+    border:1px solid rgba(120,170,255,.22);border-radius:20px;
+    padding:36px 32px;position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);
+  }
+  .modal-x{position:absolute;top:16px;right:18px;background:none;border:none;
+    color:#8295bb;font-size:26px;cursor:pointer;line-height:1;}
+  .modal-x:hover{color:#fff;}
+  .modal h3{font-size:24px;font-weight:900;}
+  .modal-sub{margin-top:8px;color:var(--muted);font-size:15px;}
+  .field{margin-top:16px;}
+  .field input{
+    width:100%;padding:14px 16px;border-radius:11px;font-size:15px;
+    background:#0a1022;border:1px solid rgba(120,170,255,.25);color:#eaf2ff;
+  }
+  .field input:focus{outline:none;border-color:var(--cyan);}
+  .modal .btn-buy{width:100%;margin-top:20px;}
+  .auth-msg{margin-top:14px;padding:11px 14px;border-radius:10px;font-size:14px;
+    display:none;line-height:1.5;}
+  .auth-msg.err{display:block;background:rgba(255,90,90,.12);color:#ff9b9b;
+    border:1px solid rgba(255,90,90,.3);}
+  .auth-msg.ok{display:block;background:rgba(52,211,153,.12);color:#7ff0c2;
+    border:1px solid rgba(52,211,153,.3);}
+  .auth-toggle{margin-top:18px;text-align:center;font-size:14px;color:var(--muted);}
+  .auth-toggle a{color:var(--cyan);font-weight:700;cursor:pointer;margin-left:6px;}
+
+  /* 구매내역 리스트 */
+  .order-list{margin-top:18px;display:flex;flex-direction:column;gap:10px;
+    max-height:340px;overflow:auto;}
+  .order-item{background:#0a1022;border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;display:flex;justify-content:space-between;align-items:center;}
+  .order-item .t{font-weight:800;}
+  .order-item .d{font-size:13px;color:var(--muted);margin-top:3px;}
+  .order-item .a{font-weight:900;color:var(--cyan);}
+  .order-empty{color:var(--muted);text-align:center;padding:30px 0;}
+</style>
+</head>
+<body>
+
+  <!-- 네비 -->
+  <nav class="nav">
+    <div class="wrap">
+      <div class="logo"><span class="ai">AI</span> 격차</div>
+      <div class="nav-links">
+        <a href="#about">이 책은</a>
+        <a href="#reader">추천 독자</a>
+        <a href="#toc">목차</a>
+        <a href="#author">저자</a>
+      </div>
+      <div id="navCta">
+        <a href="#buy" class="btn btn-buy" data-buy>구매하기</a>
+      </div>
+      <div id="navUser" class="nav-user" hidden>
+        <span class="email" id="navEmail"></span>
+        <span class="nav-linkbtn" id="navOrders">내 구매내역</span>
+        <span class="nav-linkbtn" id="navLogout">로그아웃</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 히어로 -->
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <span class="badge"><span class="led"></span> 누구나 지금 시작하는 실전 AI</span>
+        <h1>아는 것이 아니라,<br>실행이 <span class="ai">AI 격차</span>를<br>만든다</h1>
+        <p class="lead">현대자동차 36년 엔지니어가 풀어내는, 새로운 동료 AI 에이전트와 일하는 법 — 폴더 정리부터 에이전트 군단을 부리는 법까지.</p>
+        <div class="meta-row">
+          <span>지은이 <b>윤정호</b></span>
+          <span>분야 <b>AI·실무 자동화</b></span>
+          <span>전 <b>9개 장</b></span>
+        </div>
+        <div class="price">
+          <span class="now">19,800원</span>
+          <span class="was">22,000원</span>
+          <span class="off">10% 할인</span>
+        </div>
+        <div class="cta-row">
+          <a href="#buy" class="btn btn-buy" data-buy>📕 구매하기</a>
+          <a href="#toc" class="btn btn-ghost">목차 미리보기</a>
+        </div>
+      </div>
+      <div class="cover-card">
+        <img src="AI격차_표지.png" alt="AI 격차 책 표지">
+      </div>
+    </div>
+  </header>
+
+  <!-- 이 책은 -->
+  <section id="about">
+    <div class="wrap">
+      <div class="pitch-card">
+        <div class="big">“아는 사람과 모르는 사람의 차이가 아니다.<br><span class="g">실행하는 사람</span>과 멈춰 선 사람의 격차다.”</div>
+        <p>AI는 이미 당신 곁의 새로운 동료가 되었습니다. 이 책은 이론이 아니라, 오늘 당장 내 업무에 에이전트를 들이는 현실적인 방법을 보여줍니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 추천 독자 -->
+  <section id="reader">
+    <div class="wrap">
+      <div class="eyebrow">FOR WHOM</div>
+      <h2 class="sec-title">이런 분께 추천합니다</h2>
+      <p class="sec-sub">AI가 막연히 두렵거나, 어디서부터 시작할지 모르겠다면.</p>
+      <div class="reader-grid">
+        <div class="reader"><div class="ico">🧑‍💼</div><h3>AI가 처음인 직장인</h3><p>용어와 도구가 낯설어 시작을 미뤄온 분. 쉬운 비유로 첫발을 뗍니다.</p></div>
+        <div class="reader"><div class="ico">🏭</div><h3>제조·R&D 실무자</h3><p>현장의 언어로 풀어낸, 내 업무에 바로 쓰는 AX 적용법.</p></div>
+        <div class="reader"><div class="ico">🚀</div><h3>팀을 이끄는 리더</h3><p>에이전트 군단으로 팀 생산성을 끌어올리고 싶은 관리자.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 목차 -->
+  <section id="toc">
+    <div class="wrap">
+      <div class="eyebrow">CONTENTS</div>
+      <h2 class="sec-title">목차 — 9개의 장</h2>
+      <p class="sec-sub">첫 만남부터 새로운 산업혁명까지, 한 걸음씩.</p>
+      <div class="toc">
+        <div class="ch"><div class="no">01</div><div><h4>새로운 동료, AI 에이전트와의 첫 만남</h4><p>두려움을 걷어내고 AI를 동료로 받아들이기.</p></div></div>
+        <div class="ch"><div class="no">02</div><div><h4>에이전트 전에, 폴더 정리와 생각의 구조화부터</h4><p>AI를 잘 쓰는 사람의 진짜 준비물.</p></div></div>
+        <div class="ch"><div class="no">03</div><div><h4>개발자가 하던 일, 이제 우리도 쉽게 한다</h4><p>코딩 없이도 가능해진 자동화의 세계.</p></div></div>
+        <div class="ch"><div class="no">04</div><div><h4>왜 하필 지금이 최적의 시기인가</h4><p>지금 시작해야 하는 분명한 이유.</p></div></div>
+        <div class="ch"><div class="no">05</div><div><h4>회사를 넘어 산업이 바뀐다</h4><p>한 사람의 변화가 산업 전체로.</p></div></div>
+        <div class="ch"><div class="no">06</div><div><h4>에이전트 직원에게 내 업무를 나눠 주자</h4><p>반복 업무를 맡기고 본질에 집중하기.</p></div></div>
+        <div class="ch"><div class="no">07</div><div><h4>에이전트 군단과 팀을 부리는 법</h4><p>여러 AI를 동시에 부리는 실전 운영술.</p></div></div>
+        <div class="ch"><div class="no">08</div><div><h4>정보 격차 말고 실행력 격차</h4><p>아는 것을 넘어 해내는 사람이 되는 법.</p></div></div>
+        <div class="ch"><div class="no">09</div><div><h4>마치며 — 새로운 산업혁명</h4><p>당신이 그 변화의 한복판에 서 있다.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 저자 -->
+  <section id="author">
+    <div class="wrap">
+      <div class="eyebrow">AUTHOR</div>
+      <h2 class="sec-title" style="margin-bottom:28px;">지은이</h2>
+      <div class="author">
+        <img src="profile.jpg" alt="윤정호 저자 사진">
+        <div>
+          <h3>🌱 윤정호</h3>
+          <div class="role">AX Lecturer · 前 현대자동차 책임연구원</div>
+          <ul>
+            <li>현대자동차 자동차 전자 부문 개발 책임연구원 (36년)</li>
+            <li>협력사 임직원 대상 AX 역량 강화 워크숍 다수 진행</li>
+            <li>現 ESG 부품 공급망 심사원</li>
+            <li>제조·ESG·AI를 잇는 현장형 AX 교육 전문가</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 최종 CTA -->
+  <section id="buy" class="final">
+    <div class="wrap">
+      <h2>지금, <span class="g">실행하는 사람</span>이 되세요</h2>
+      <p>『AI 격차』와 함께 새로운 동료를 맞이하세요.</p>
+      <div class="price" style="justify-content:center;margin-top:24px;">
+        <span class="now">19,800원</span>
+        <span class="was">22,000원</span>
+        <span class="off">10% 할인</span>
+      </div>
+      <div class="cta-row" style="justify-content:center;margin-top:24px;">
+        <a href="#" class="btn btn-buy" style="font-size:20px;padding:18px 46px;" data-buy>📕 구매하기</a>
+      </div>
+      <p style="margin-top:18px;font-size:14px;color:#6f80a6;">아래 서점에서도 만나보실 수 있습니다</p>
+      <div class="stores">
+        <a href="#" class="store">교보문고</a>
+        <a href="#" class="store">예스24</a>
+        <a href="#" class="store">알라딘</a>
+        <a href="#" class="store">한빛미디어</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 윤정호 · AX BOOKS &nbsp;|&nbsp; 『AI 격차』 도서 안내 페이지
+  </footer>
+
+  <!-- 모바일 하단 고정 구매 바 -->
+  <div class="buybar">
+    <span class="p">19,800원</span>
+    <a href="#buy" class="btn btn-buy" data-buy>📕 구매하기</a>
+  </div>
+
+  <!-- ===== 로그인 / 회원가입 모달 ===== -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <button class="modal-x" id="authClose" aria-label="닫기">×</button>
+      <h3 id="authTitle">로그인</h3>
+      <p class="modal-sub" id="authSub">구매하려면 먼저 로그인이 필요해요.</p>
+      <div class="auth-msg" id="authMsg"></div>
+      <div class="field"><input type="email" id="authEmail" placeholder="이메일 (예: hong@gmail.com)" autocomplete="email"></div>
+      <div class="field"><input type="password" id="authPw" placeholder="비밀번호 (6자 이상)" autocomplete="current-password"></div>
+      <button class="btn btn-buy" id="authSubmit">로그인</button>
+      <div class="auth-toggle">
+        <span id="authToggleText">아직 회원이 아니신가요?</span>
+        <a id="authToggle">회원가입</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 내 구매내역 모달 ===== -->
+  <div class="modal-overlay" id="ordersModal">
+    <div class="modal">
+      <button class="modal-x" id="ordersClose" aria-label="닫기">×</button>
+      <h3>내 구매내역</h3>
+      <p class="modal-sub" id="ordersSub"></p>
+      <div class="order-list" id="orderList"></div>
+    </div>
+  </div>
+
+  <!-- ===== 슈파베이스 연결 + 로그인/구매 로직 ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  /* ─────────────────────────────────────────────
+     ① 슈파베이스 연결 정보  ← 여기 2줄만 바꾸면 됩니다!
+     (슈파베이스 → Project Settings → API 에서 복사)
+     ───────────────────────────────────────────── */
+  const SUPABASE_URL      = "https://tlsxlfeziskjyunkktwt.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_uo_v-iYcjHNddrGuG0JRVQ_LKYR384Q";
+  const BOOK_PRICE = 19800;   // 책 가격(원)
+
+  /* ── 아래부터는 그대로 두셔도 됩니다 ───────────── */
+  const READY = !SUPABASE_URL.includes("여기에");
+  const sb = READY ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+  const $ = (id) => document.getElementById(id);
+  let mode = "login";          // 'login' 또는 'signup'
+  let buyAfterLogin = false;    // 로그인 직후 바로 구매로 이어줄지
+
+  // ----- 모달 열고 닫기 -----
+  function openAuth(){ $("authMsg").className="auth-msg"; $("authModal").classList.add("show"); }
+  function closeAuth(){ $("authModal").classList.remove("show"); }
+  function showMsg(text, type){ const m=$("authMsg"); m.textContent=text; m.className="auth-msg "+type; }
+
+  function setMode(m){
+    mode = m;
+    if(m==="login"){
+      $("authTitle").textContent="로그인";
+      $("authSubmit").textContent="로그인";
+      $("authToggleText").textContent="아직 회원이 아니신가요?";
+      $("authToggle").textContent="회원가입";
+    }else{
+      $("authTitle").textContent="회원가입";
+      $("authSubmit").textContent="가입하고 시작하기";
+      $("authToggleText").textContent="이미 회원이신가요?";
+      $("authToggle").textContent="로그인";
+    }
+  }
+
+  // ----- 구매 버튼 클릭 -----
+  document.querySelectorAll("[data-buy]").forEach(btn=>{
+    btn.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      if(!READY){ buyAfterLogin=true; setMode("login"); openAuth(); return; }
+      const { data:{ user } } = await sb.auth.getUser();
+      if(user){ await purchase(user); }
+      else { buyAfterLogin=true; setMode("login"); openAuth(); }
+    });
+  });
+
+  // ----- 로그인/가입 제출 -----
+  $("authSubmit").addEventListener("click", async ()=>{
+    const email=$("authEmail").value.trim();
+    const pw=$("authPw").value;
+    if(!email || !pw){ showMsg("이메일과 비밀번호를 입력해 주세요.","err"); return; }
+    if(!READY){ showMsg("아직 슈파베이스에 연결되지 않았어요. 설정을 마치면 바로 작동해요. 🙂","err"); return; }
+
+    $("authSubmit").disabled=true;
+    try{
+      let result;
+      if(mode==="signup"){
+        result = await sb.auth.signUp({ email, password:pw });
+        if(result.error) throw result.error;
+        if(!result.data.session){  // 이메일 인증 필요한 경우
+          showMsg("가입 메일을 보냈어요. 메일의 링크를 누른 뒤 다시 로그인해 주세요.","ok");
+          setMode("login"); $("authSubmit").disabled=false; return;
+        }
+      }else{
+        result = await sb.auth.signInWithPassword({ email, password:pw });
+        if(result.error) throw result.error;
+      }
+      const user = result.data.user;
+      await recordLogin(user);          // 로그인 기록 남기기
+      refreshUI(user);
+      closeAuth();
+      if(buyAfterLogin){ buyAfterLogin=false; await purchase(user); }
+    }catch(err){
+      showMsg(translate(err.message), "err");
+    }finally{
+      $("authSubmit").disabled=false;
+    }
+  });
+
+  // 흔한 영어 오류를 한국어로
+  function translate(msg){
+    if(/Invalid login/.test(msg)) return "이메일 또는 비밀번호가 올바르지 않아요.";
+    if(/already registered/.test(msg)) return "이미 가입된 이메일이에요. 로그인해 주세요.";
+    if(/at least 6/.test(msg)) return "비밀번호는 6자 이상이어야 해요.";
+    return msg;
+  }
+
+  // ----- 로그인 기록 저장 -----
+  async function recordLogin(user){
+    await sb.from("login_logs").insert({
+      user_id: user.id,
+      email: user.email,
+      user_agent: navigator.userAgent
+    });
+  }
+
+  // ----- 구매 처리 -----
+  async function purchase(user){
+    const { data:product } = await sb.from("products").select("id,price").eq("title","AI 격차").single();
+    const { error } = await sb.from("orders").insert({
+      user_id: user.id,
+      product_id: product ? product.id : null,
+      amount: product ? product.price : BOOK_PRICE,
+      status: "paid"
+    });
+    if(error){ alert("구매 처리 중 문제가 생겼어요: "+error.message); return; }
+    alert("구매가 완료됐어요! 🎉  상단 '내 구매내역'에서 확인하실 수 있어요.");
+  }
+
+  // ----- 로그인 상태에 따라 화면 바꾸기 -----
+  function refreshUI(user){
+    if(user){
+      $("navCta").hidden=true;
+      $("navUser").hidden=false;
+      $("navEmail").textContent=user.email;
+    }else{
+      $("navCta").hidden=false;
+      $("navUser").hidden=true;
+    }
+  }
+
+  // ----- 내 구매내역 보기 -----
+  $("navOrders").addEventListener("click", async ()=>{
+    if(!READY) return;
+    const { data:{ user } } = await sb.auth.getUser();
+    if(!user) return;
+    const { data:orders } = await sb.from("orders")
+      .select("amount,status,created_at").order("created_at",{ascending:false});
+    const list=$("orderList");
+    if(!orders || orders.length===0){
+      $("ordersSub").textContent="";
+      list.innerHTML='<div class="order-empty">아직 구매내역이 없어요.</div>';
+    }else{
+      $("ordersSub").textContent=`총 ${orders.length}건`;
+      list.innerHTML=orders.map(o=>{
+        const d=new Date(o.created_at).toLocaleString("ko-KR");
+        return `<div class="order-item"><div><div class="t">AI 격차</div>
+          <div class="d">${d} · ${o.status}</div></div>
+          <div class="a">${o.amount.toLocaleString()}원</div></div>`;
+      }).join("");
+    }
+    $("ordersModal").classList.add("show");
+  });
+
+  // ----- 로그아웃 -----
+  $("navLogout").addEventListener("click", async ()=>{
+    if(READY) await sb.auth.signOut();
+    refreshUI(null);
+  });
+
+  // ----- 모달 닫기 버튼들 -----
+  $("authClose").addEventListener("click", closeAuth);
+  $("ordersClose").addEventListener("click", ()=>$("ordersModal").classList.remove("show"));
+  $("authToggle").addEventListener("click", ()=> setMode(mode==="login"?"signup":"login"));
+  document.querySelectorAll(".modal-overlay").forEach(o=>{
+    o.addEventListener("click",(e)=>{ if(e.target===o) o.classList.remove("show"); });
+  });
+
+  // ----- 페이지 열릴 때 로그인 상태 확인 -----
+  (async ()=>{
+    if(!READY) return;
+    const { data:{ user } } = await sb.auth.getUser();
+    refreshUI(user);
+  })();
+  </script>
+
+</body>
+</html>

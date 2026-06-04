@@ -1371,6 +1371,197 @@ main > section:nth-of-type(even) > * {
     .nav-menu.is-open li:last-child { border-bottom: none; }
 }
 
+/* ============================================================
+   [section-testimonials] 수강 후기
+   ============================================================ */
+#section-testimonials {
+    text-align: center;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    text-align: left;
+    margin-top: 3rem;
+}
+
+.testimonial-card {
+    padding: 2rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+}
+
+.testimonial-quote {
+    position: relative;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+    padding-top: 1.75rem;
+}
+
+.testimonial-quote::before {
+    content: '\201C';
+    position: absolute;
+    top: -0.5rem;
+    left: -0.5rem;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--color-accent);
+    font-weight: 800;
+    font-family: Georgia, 'Nanum Myeongjo', serif;
+}
+
+.testimonial-author {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.testimonial-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.125rem;
+}
+
+.testimonial-affiliation {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.testimonial-course {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+.testimonials-note {
+    margin-top: 2.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    font-style: italic;
+}
+
+@media (max-width: 1024px) {
+    .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .testimonials-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   [section-faq] 자주 묻는 질문 — 아코디언
+   ============================================================ */
+#section-faq {
+    background: var(--color-bg-alt);
+}
+
+.faq-list {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.faq-item {
+    background: #fff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--transition);
+}
+
+.faq-item[open] {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1.125rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: color var(--transition);
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+    content: '+';
+    display: inline-block;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 22px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    border: 1.5px solid var(--color-accent);
+    border-radius: 50%;
+    transition: transform var(--transition);
+}
+
+.faq-item[open] summary::after {
+    content: '−';
+    transform: rotate(180deg);
+}
+
+.faq-item summary:hover {
+    color: var(--color-primary);
+}
+
+.faq-answer {
+    padding: 0 1.5rem 1.25rem;
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    font-size: 0.9375rem;
+}
+
+.faq-answer p { margin-bottom: 0.75rem; }
+.faq-answer p:last-child { margin-bottom: 0; }
+
+.faq-answer ul,
+.faq-answer ol {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.faq-answer ul { list-style: disc; }
+.faq-answer ol { list-style: decimal; }
+
+.faq-answer li {
+    margin-bottom: 0.375rem;
+}
+
+.faq-answer strong {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.faq-answer a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
 /* 폼 제출 성공 메시지 */
 .form-success {
     margin-top: 1rem;
