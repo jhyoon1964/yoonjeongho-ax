@@ -67,14 +67,6 @@
     box-shadow:0 0 12px var(--cyan),0 0 24px var(--cyan);}
 
   .title{margin-top:28px;text-align:center;line-height:.96;position:relative;}
-  /* 제목 가독성용 어두운 스크림 — 밝은 코어 위에서 글자 분리 */
-  .title::before{
-    content:"";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
-    width:560px;height:600px;z-index:-1;pointer-events:none;
-    background:radial-gradient(56% 50% at 50% 50%,
-      rgba(3,7,20,.78) 0%,rgba(3,7,20,.55) 48%,rgba(3,7,20,.22) 68%,transparent 80%);
-    filter:blur(10px);
-  }
   .title .ai{
     font-size:230px;font-weight:900;letter-spacing:-6px;
     background:linear-gradient(180deg,#ffffff 0%,#bfe6ff 45%,#4cc6ff 100%);
@@ -123,9 +115,9 @@
     <svg class="hero" viewBox="0 0 760 760" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#bff0ff" stop-opacity="1"/>
-          <stop offset="35%" stop-color="#3bc4ff" stop-opacity=".9"/>
-          <stop offset="70%" stop-color="#2f6dff" stop-opacity=".25"/>
+          <stop offset="0%" stop-color="#8fc8e6" stop-opacity=".7"/>
+          <stop offset="35%" stop-color="#2f93c8" stop-opacity=".5"/>
+          <stop offset="70%" stop-color="#2f6dff" stop-opacity=".18"/>
           <stop offset="100%" stop-color="#2f6dff" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="halo" cx="50%" cy="50%" r="50%">
@@ -193,9 +185,9 @@
         </g>
       </g>
 
-      <!-- 중심 코어 -->
-      <circle cx="380" cy="380" r="120" fill="url(#core)" filter="url(#glow)"/>
-      <circle cx="380" cy="380" r="34" fill="#eafaff" filter="url(#glow)"/>
+      <!-- 중심 코어 (제목 가독성 위해 밝기 낮춤) -->
+      <circle cx="380" cy="380" r="120" fill="url(#core)" filter="url(#glow)" opacity=".75"/>
+      <circle cx="380" cy="380" r="26" fill="#cfeaf6" filter="url(#glow)" opacity=".5"/>
     </svg>
 
     <div class="layer">
