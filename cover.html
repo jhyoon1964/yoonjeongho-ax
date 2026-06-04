@@ -66,17 +66,24 @@
   .eyebrow .led{width:8px;height:8px;border-radius:50%;background:var(--cyan);
     box-shadow:0 0 12px var(--cyan),0 0 24px var(--cyan);}
 
-  .title{margin-top:28px;text-align:center;line-height:.96;}
+  .title{margin-top:28px;text-align:center;line-height:.96;position:relative;}
   .title .ai{
     font-size:230px;font-weight:900;letter-spacing:-6px;
     background:linear-gradient(180deg,#ffffff 0%,#bfe6ff 45%,#4cc6ff 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 0 40px rgba(76,198,255,.65)) drop-shadow(0 0 90px rgba(59,130,246,.5));
+    filter:drop-shadow(0 3px 14px rgba(0,6,20,.9))
+           drop-shadow(0 0 40px rgba(76,198,255,.65))
+           drop-shadow(0 0 90px rgba(59,130,246,.5));
     display:block;
   }
   .title .kr{
     font-size:118px;font-weight:900;letter-spacing:-2px;color:#f4f8ff;
-    text-shadow:0 0 30px rgba(120,170,255,.45);margin-top:-6px;display:block;
+    -webkit-text-stroke:1px rgba(8,16,34,.55);
+    text-shadow:
+      0 2px 16px rgba(2,6,18,.92),
+      0 0 6px rgba(2,6,18,.85),
+      0 0 32px rgba(120,170,255,.45);
+    margin-top:-6px;display:block;
   }
   .with{margin-top:30px;font-size:26px;font-weight:700;color:#cfe0ff;letter-spacing:.5px;}
   .with b{color:var(--cyan);}
@@ -108,9 +115,9 @@
     <svg class="hero" viewBox="0 0 760 760" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#bff0ff" stop-opacity="1"/>
-          <stop offset="35%" stop-color="#3bc4ff" stop-opacity=".9"/>
-          <stop offset="70%" stop-color="#2f6dff" stop-opacity=".25"/>
+          <stop offset="0%" stop-color="#8fc8e6" stop-opacity=".7"/>
+          <stop offset="35%" stop-color="#2f93c8" stop-opacity=".5"/>
+          <stop offset="70%" stop-color="#2f6dff" stop-opacity=".18"/>
           <stop offset="100%" stop-color="#2f6dff" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="halo" cx="50%" cy="50%" r="50%">
@@ -178,9 +185,9 @@
         </g>
       </g>
 
-      <!-- 중심 코어 -->
-      <circle cx="380" cy="380" r="120" fill="url(#core)" filter="url(#glow)"/>
-      <circle cx="380" cy="380" r="34" fill="#eafaff" filter="url(#glow)"/>
+      <!-- 중심 코어 (제목 가독성 위해 밝기 낮춤) -->
+      <circle cx="380" cy="380" r="120" fill="url(#core)" filter="url(#glow)" opacity=".75"/>
+      <circle cx="380" cy="380" r="26" fill="#cfeaf6" filter="url(#glow)" opacity=".5"/>
     </svg>
 
     <div class="layer">
