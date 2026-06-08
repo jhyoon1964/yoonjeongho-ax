@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 검색엔진 노출 방지 (비밀 페이지) -->
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <title>교안 자동 생성 · 윤정호</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <link rel="stylesheet" href="/styles.css">
+
+    <style>
+        /* 교안 생성 도구 전용 스타일 (홈페이지 디자인 토큰 재사용) */
+        body { background: var(--color-bg-alt); }
+
+        .tool-header {
+            background: var(--color-primary);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            position: sticky; top: 0; z-index: 10;
+            box-shadow: var(--shadow-md);
+        }
+        .tool-header a {
+            color: #fff; text-decoration: none;
+            display: inline-flex; align-items: baseline; gap: .55rem;
+        }
+        .tool-header .name { font-weight: 800; font-size: 1.15rem; letter-spacing: -.01em; }
+        .tool-header .slogan { font-size: .82rem; color: #BBD0F0; }
+
+        .tool-wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+        .tool-title { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; color: var(--color-primary); letter-spacing: -.02em; }
+        .tool-lead { margin-top: .6rem; color: var(--color-text-secondary); line-height: 1.7; }
+
+        .card {
+            background: #fff; border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg); padding: 1.75rem;
+            box-shadow: var(--shadow-sm); margin-top: 1.75rem;
+        }
+
+        /* 업로드 박스 */
+        .dropzone {
+            border: 2px dashed var(--color-border); border-radius: var(--radius-md);
+            padding: 2.5rem 1.5rem; text-align: center; cursor: pointer;
+            transition: var(--transition); background: var(--color-bg-alt);
+        }
+        .dropzone:hover, .dropzone.dragover {
+            border-color: var(--color-accent); background: #F0FAF5;
+        }
+        .dropzone .big { font-weight: 700; color: var(--color-text); }
+        .dropzone .small { margin-top: .4rem; font-size: .85rem; color: var(--color-text-muted); }
+        .dropzone svg { width: 38px; height: 38px; color: var(--color-primary-light); margin-bottom: .75rem; }
+
+        .file-list { list-style: none; margin: 1rem 0 0; padding: 0; }
+        .file-list li {
+            display: flex; align-items: center; gap: .75rem;
+            padding: .7rem .9rem; border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-sm); margin-top: .55rem; background: #fff;
+        }
+        .file-list .fname { flex: 1; font-weight: 600; font-size: .92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-list .fsize { font-size: .8rem; color: var(--color-text-muted); white-space: nowrap; }
+        .file-list .fdel {
+            border: none; background: var(--color-border-light); color: var(--color-text-secondary);
+            width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 1rem; line-height: 1;
+        }
+        .file-list .fdel:hover { background: #FED7D7; color: #C53030; }
+
+        .btn-generate {
+            display: block; width: 100%; margin-top: 1.5rem;
+            background: var(--color-accent); color: #fff; border: none;
+            padding: 1rem; font-size: 1.05rem; font-weight: 800; letter-spacing: -.01em;
+            border-radius: var(--radius-md); cursor: pointer; transition: var(--transition);
+            font-family: var(--font-base);
+        }
+        .btn-generate:hover:not(:disabled) { background: var(--color-accent-light); transform: translateY(-1px); }
+        .btn-generate:disabled { opacity: .55; cursor: not-allowed; }
+
+        .status { margin-top: 1.25rem; font-size: .92rem; min-height: 1.4em; }
+        .status.err { color: #C53030; }
+        .status.ok { color: var(--color-accent); }
+        .spinner {
+            display: inline-block; width: 16px; height: 16px; vertical-align: -3px; margin-right: .5rem;
+            border: 2px solid var(--color-border); border-top-color: var(--color-primary);
+            border-radius: 50%; animation: spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .result-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .result-head h2 { font-size: 1.15rem; color: var(--color-primary); }
+        .btn-copy {
+            border: 1px solid var(--color-primary-light); background: #fff; color: var(--color-primary);
+            padding: .45rem .9rem; border-radius: var(--radius-sm); cursor: pointer; font-weight: 700; font-size: .85rem;
+            font-family: var(--font-base);
+        }
+        .btn-copy:hover { background: var(--color-primary); color: #fff; }
+        .result-body {
+            margin-top: 1rem; white-space: pre-wrap; word-break: break-word; line-height: 1.75;
+            color: var(--color-text); max-height: 60vh; overflow-y: auto;
+            background: var(--color-bg-alt); border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-md); padding: 1.25rem; font-size: .95rem;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <header class="tool-header">
+        <a href="/" title="홈으로">
+            <span class="name">윤정호</span>
+            <span class="slogan">36년 자동차 엔지니어가 전하는 현장형 AI 교육</span>
+        </a>
+    </header>
+
+    <main class="tool-wrap">
+        <h1 class="tool-title">교안 자동 생성</h1>
+        <p class="tool-lead">강의 자료(PDF · Word · TXT)를 업로드하면 AI가 내용을 종합해 교안을 자동으로 만들어 줍니다.<br>관련된 자료 <strong>3~5개</strong>를 함께 올리면 가장 좋은 결과가 나옵니다.</p>
+
+        <section class="card">
+            <div id="dropzone" class="dropzone" role="button" tabindex="0">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <div class="big">파일을 끌어 놓거나 클릭하여 선택</div>
+                <div class="small">PDF · DOCX · TXT · 파일당 최대 4.5MB · 최대 5개</div>
+                <input id="fileInput" type="file" accept=".pdf,.doc,.docx,.txt" multiple class="hidden">
+            </div>
+
+            <ul id="fileList" class="file-list"></ul>
+
+            <button id="btnGenerate" class="btn-generate" disabled>교안 생성</button>
+            <div id="status" class="status" aria-live="polite"></div>
+        </section>
+
+        <section id="resultCard" class="card hidden">
+            <div class="result-head">
+                <h2>생성된 교안</h2>
+                <button id="btnCopy" class="btn-copy">복사</button>
+            </div>
+            <div id="resultBody" class="result-body"></div>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        // 비밀 페이지 토큰 — Vercel 환경변수 ACCESS_TOKEN 과 동일한 값으로 맞춰주세요.
+        var ACCESS_TOKEN = "axtok_d3f8k1m6";
+
+        var MAX_FILES = 5;
+        var MAX_SIZE = 4.5 * 1024 * 1024; // Vercel 함수 요청 한도(4.5MB) 기준
+        var ALLOWED = /\.(pdf|docx?|txt)$/i;
+
+        var dropzone = document.getElementById("dropzone");
+        var fileInput = document.getElementById("fileInput");
+        var fileListEl = document.getElementById("fileList");
+        var btnGenerate = document.getElementById("btnGenerate");
+        var statusEl = document.getElementById("status");
+        var resultCard = document.getElementById("resultCard");
+        var resultBody = document.getElementById("resultBody");
+        var btnCopy = document.getElementById("btnCopy");
+
+        var files = []; // 선택된 파일 목록
+
+        function fmtSize(n) {
+            if (n < 1024) return n + " B";
+            if (n < 1024 * 1024) return (n / 1024).toFixed(0) + " KB";
+            return (n / 1024 / 1024).toFixed(2) + " MB";
+        }
+
+        function setStatus(msg, kind) {
+            statusEl.className = "status" + (kind ? " " + kind : "");
+            statusEl.innerHTML = msg || "";
+        }
+
+        function render() {
+            fileListEl.innerHTML = "";
+            files.forEach(function (f, i) {
+                var li = document.createElement("li");
+                var name = document.createElement("span"); name.className = "fname"; name.textContent = f.name;
+                var size = document.createElement("span"); size.className = "fsize"; size.textContent = fmtSize(f.size);
+                var del = document.createElement("button"); del.className = "fdel"; del.type = "button"; del.textContent = "×"; del.title = "삭제";
+                del.onclick = function () { files.splice(i, 1); render(); };
+                li.appendChild(name); li.appendChild(size); li.appendChild(del);
+                fileListEl.appendChild(li);
+            });
+            btnGenerate.disabled = files.length === 0;
+        }
+
+        function addFiles(fileList) {
+            var rejected = [];
+            Array.prototype.forEach.call(fileList, function (f) {
+                if (!ALLOWED.test(f.name)) { rejected.push(f.name + " (형식)"); return; }
+                if (f.size > MAX_SIZE) { rejected.push(f.name + " (4.5MB 초과)"); return; }
+                if (files.length >= MAX_FILES) { rejected.push(f.name + " (최대 5개)"); return; }
+                if (files.some(function (x) { return x.name === f.name && x.size === f.size; })) return;
+                files.push(f);
+            });
+            render();
+            if (rejected.length) setStatus("제외된 파일: " + rejected.join(", "), "err");
+            else setStatus("");
+        }
+
+        dropzone.addEventListener("click", function () { fileInput.click(); });
+        dropzone.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); } });
+        fileInput.addEventListener("change", function () { addFiles(fileInput.files); fileInput.value = ""; });
+
+        ["dragenter", "dragover"].forEach(function (ev) {
+            dropzone.addEventListener(ev, function (e) { e.preventDefault(); dropzone.classList.add("dragover"); });
+        });
+        ["dragleave", "drop"].forEach(function (ev) {
+            dropzone.addEventListener(ev, function (e) { e.preventDefault(); dropzone.classList.remove("dragover"); });
+        });
+        dropzone.addEventListener("drop", function (e) {
+            if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+        });
+
+        function uploadOne(file) {
+            return fetch("/api/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/octet-stream",
+                    "x-access-token": ACCESS_TOKEN,
+                    "x-filename": encodeURIComponent(file.name),
+                    "x-filemime": file.type || "application/octet-stream"
+                },
+                body: file
+            }).then(function (r) {
+                return r.json().then(function (j) {
+                    if (!r.ok) throw new Error(j.error || ("업로드 실패 (" + r.status + ")"));
+                    return j.id;
+                });
+            });
+        }
+
+        btnGenerate.addEventListener("click", function () {
+            if (files.length === 0) return;
+            btnGenerate.disabled = true;
+            resultCard.classList.add("hidden");
+
+            var ids = [];
+            var chain = Promise.resolve();
+            files.forEach(function (f, i) {
+                chain = chain.then(function () {
+                    setStatus('<span class="spinner"></span>문서 업로드 중… (' + (i + 1) + '/' + files.length + ') ' + f.name);
+                    return uploadOne(f).then(function (id) { ids.push(id); });
+                });
+            });
+
+            chain.then(function () {
+                setStatus('<span class="spinner"></span>교안 생성 중… 자료 양에 따라 30초~2분 정도 걸릴 수 있습니다.');
+                return fetch("/api/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "x-access-token": ACCESS_TOKEN },
+                    body: JSON.stringify({ fileIds: ids, url: "" })
+                });
+            }).then(function (r) {
+                return r.json().then(function (j) {
+                    if (!r.ok) throw new Error(j.error || ("생성 실패 (" + r.status + ")"));
+                    return j.result;
+                });
+            }).then(function (result) {
+                resultBody.textContent = result;
+                resultCard.classList.remove("hidden");
+                setStatus("교안 생성이 완료되었습니다.", "ok");
+                resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
+            }).catch(function (err) {
+                setStatus("오류: " + (err && err.message ? err.message : err), "err");
+            }).then(function () {
+                btnGenerate.disabled = files.length === 0;
+            });
+        });
+
+        btnCopy.addEventListener("click", function () {
+            var text = resultBody.textContent || "";
+            navigator.clipboard.writeText(text).then(function () {
+                btnCopy.textContent = "복사됨!";
+                setTimeout(function () { btnCopy.textContent = "복사"; }, 1500);
+            }).catch(function () {
+                btnCopy.textContent = "복사 실패";
+                setTimeout(function () { btnCopy.textContent = "복사"; }, 1500);
+            });
+        });
+    })();
+    </script>
+</body>
+</html>
