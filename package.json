@@ -1,0 +1,9 @@
+{
+  "name": "yoonjeongho-ax",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
