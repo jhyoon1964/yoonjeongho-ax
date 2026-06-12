@@ -51,12 +51,52 @@ function parseGeneric(text) {
   return slides.filter(s => s.bullets.length || s.title);
 }
 
+// 마크다운 구조가 없는 평문(예: PDF에서 추출한 텍스트)을 슬라이드로 변환.
+//  "# 제목" 줄을 섹션 경계로 보고, 각 섹션 본문을 문장 단위 불릿으로 나눠 분할.
+function parsePlainText(text) {
+  const SENT_PER_SLIDE = 6, MAX_BULLET = 180, MAX_SLIDES = 60;
+  const lines = String(text).split(/\r?\n/);
+  const blocks = [];
+  let cur = { title: "", body: [] };
+  for (const ln of lines) {
+    const h = ln.match(/^#\s+(.*)$/);
+    if (h) {
+      if (cur.title || cur.body.length) blocks.push(cur);
+      cur = { title: (h[1] || "").trim(), body: [] };
+    } else if (ln.trim()) {
+      cur.body.push(ln.trim());
+    }
+  }
+  if (cur.title || cur.body.length) blocks.push(cur);
+  if (!blocks.length) return [];
+
+  const slides = [];
+  for (const b of blocks) {
+    const joined = b.body.join(" ").replace(/\s+/g, " ").trim();
+    // 문장 단위 분리(마침표·물음표·느낌표·"다." 등). 룩비하인드 없이 처리.
+    let sentences = joined ? (joined.match(/[^.!?。…]+[.!?。…]+|\S[^.!?。…]*$/g) || [joined]) : [];
+    sentences = sentences.map(s => s.trim()).filter(s => s.length > 1)
+      .map(s => s.length > MAX_BULLET ? s.slice(0, MAX_BULLET - 1) + "…" : s);
+    if (!sentences.length) { if (b.title) slides.push({ title: b.title, bullets: [] }); continue; }
+    for (let i = 0; i < sentences.length; i += SENT_PER_SLIDE) {
+      if (slides.length >= MAX_SLIDES) break;
+      slides.push({
+        title: (b.title || "내용") + (i > 0 ? " (계속)" : ""),
+        bullets: sentences.slice(i, i + SENT_PER_SLIDE),
+      });
+    }
+    if (slides.length >= MAX_SLIDES) break;
+  }
+  return slides;
+}
+
 async function buildLessonPptx(text, rawName) {
   const deckTitle = cleanTitle(rawName);
   let slides = [];
   const sec = extractSlideSection(text);
   if (sec) slides = parseSlideBlocks(sec);
   if (!slides.length) slides = parseGeneric(text);
+  if (!slides.length) slides = parsePlainText(text);
   if (!slides.length) slides = [{ title: "교안", bullets: [String(text).slice(0, 400)] }];
 
   const cover = slides.find(s => /표지|cover|title/i.test(s.title));
