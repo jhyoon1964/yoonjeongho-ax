@@ -52,42 +52,64 @@ function parseGeneric(text) {
 }
 
 // 마크다운 구조가 없는 평문(예: PDF에서 추출한 텍스트)을 슬라이드로 변환.
-//  "# 제목" 줄을 섹션 경계로 보고, 각 섹션 본문을 문장 단위 불릿으로 나눠 분할.
+//  줄 단위로 제목('… /' 또는 다음 줄이 불릿) / 불릿(•·-) / 본문을 구분하고,
+//  반복 푸터·페이지번호를 제거. 구조가 전혀 없으면 문장 단위로 쪼갬.
 function parsePlainText(text) {
-  const SENT_PER_SLIDE = 6, MAX_BULLET = 180, MAX_SLIDES = 60;
-  const lines = String(text).split(/\r?\n/);
-  const blocks = [];
-  let cur = { title: "", body: [] };
-  for (const ln of lines) {
-    const h = ln.match(/^#\s+(.*)$/);
-    if (h) {
-      if (cur.title || cur.body.length) blocks.push(cur);
-      cur = { title: (h[1] || "").trim(), body: [] };
-    } else if (ln.trim()) {
-      cur.body.push(ln.trim());
-    }
-  }
-  if (cur.title || cur.body.length) blocks.push(cur);
-  if (!blocks.length) return [];
+  const MAX_BULLET = 200, MAX_BPS = 8, MAX_SLIDES = 60;
+  const rawLines = String(text).split(/\r?\n/).map(s => s.replace(/[ \t]+/g, " ").trim());
 
+  // 반복 줄(머리말/꼬리말) 빈도 계산
+  const freq = {};
+  for (const l of rawLines) { if (l) freq[l] = (freq[l] || 0) + 1; }
+  const isFooter = (l) => {
+    if (!l) return true;
+    if (/^\d{1,3}$/.test(l)) return true;                       // 페이지 번호
+    if (/·\s*윤정호\s*AX\s*Lecturer/i.test(l)) return true;     // 생성기 꼬리말
+    if (/AX\s*Lecturer\s*\d*$/i.test(l)) return true;
+    if (/^AI 자동 생성 교안/.test(l)) return true;              // 생성기 표지 문구
+    if (freq[l] >= 3 && l.length < 70) return true;             // 반복 꼬리말
+    return false;
+  };
+
+  const lines = rawLines.filter((l) => !isFooter(l));
+  const bulletRe = /^[-*•·▪◦‣]\s*/;
   const slides = [];
-  for (const b of blocks) {
-    const joined = b.body.join(" ").replace(/\s+/g, " ").trim();
-    // 문장 단위 분리(마침표·물음표·느낌표·"다." 등). 룩비하인드 없이 처리.
-    let sentences = joined ? (joined.match(/[^.!?。…]+[.!?。…]+|\S[^.!?。…]*$/g) || [joined]) : [];
-    sentences = sentences.map(s => s.trim()).filter(s => s.length > 1)
-      .map(s => s.length > MAX_BULLET ? s.slice(0, MAX_BULLET - 1) + "…" : s);
-    if (!sentences.length) { if (b.title) slides.push({ title: b.title, bullets: [] }); continue; }
-    for (let i = 0; i < sentences.length; i += SENT_PER_SLIDE) {
-      if (slides.length >= MAX_SLIDES) break;
-      slides.push({
-        title: (b.title || "내용") + (i > 0 ? " (계속)" : ""),
-        bullets: sentences.slice(i, i + SENT_PER_SLIDE),
-      });
+  let cur = null;
+  const clip = (t) => (t.length > MAX_BULLET ? t.slice(0, MAX_BULLET - 1) + "…" : t);
+  const pushBullet = (t) => {
+    t = t.trim(); if (!t) return;
+    if (!cur) { cur = { title: "내용", bullets: [] }; slides.push(cur); }
+    cur.bullets.push(clip(t));
+  };
+  const newSlide = (title) => { cur = { title: (title || "내용").trim(), bullets: [] }; slides.push(cur); };
+
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (!l) continue;
+    const h = l.match(/^#+\s+(.*)$/);
+    if (h) { newSlide(h[1]); continue; }
+    if (bulletRe.test(l)) { pushBullet(l.replace(bulletRe, "")); continue; }
+    if ((l.match(/•/g) || []).length >= 2) { l.split(/\s*•\s*/).forEach(pushBullet); continue; }
+    const next = lines[i + 1] || "";
+    const looksTitle = /\/\s*$/.test(l) || (l.length <= 40 && bulletRe.test(next));
+    if (looksTitle) { newSlide(l.replace(/\s*\/\s*$/, "")); }
+    else if (cur && cur.bullets.length) {
+      // 줄바꿈된 본문 연속 → 직전 불릿에 이어붙임
+      const last = cur.bullets.length - 1;
+      cur.bullets[last] = clip(cur.bullets[last] + " " + l);
+    } else {
+      (l.match(/[^.!?。…]+[.!?。…]+|\S[^.!?。…]*$/g) || [l]).forEach(pushBullet);
     }
-    if (slides.length >= MAX_SLIDES) break;
   }
-  return slides;
+
+  // 불릿 있는 슬라이드만, 8개 초과는 분할
+  const out = [];
+  for (const s of slides) {
+    if (!s.bullets.length) continue;
+    if (s.bullets.length <= MAX_BPS) out.push(s);
+    else for (let i = 0; i < s.bullets.length; i += MAX_BPS) out.push({ title: s.title + (i > 0 ? " (계속)" : ""), bullets: s.bullets.slice(i, i + MAX_BPS) });
+  }
+  return out.slice(0, MAX_SLIDES);
 }
 
 async function buildLessonPptx(text, rawName) {

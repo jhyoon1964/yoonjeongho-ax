@@ -231,7 +231,16 @@
                         seq = seq.then(function () {
                             return pdf.getPage(n)
                                 .then(function (page) { return page.getTextContent(); })
-                                .then(function (tc) { pages.push(tc.items.map(function (t) { return t.str; }).join(" ")); });
+                                .then(function (tc) {
+                                    // hasEOL 로 줄바꿈을 보존해야 제목/불릿 구조가 살아 PPT가 깔끔해짐
+                                    var lineBuf = "", lines = [];
+                                    tc.items.forEach(function (t) {
+                                        lineBuf += t.str;
+                                        if (t.hasEOL) { if (lineBuf.trim()) lines.push(lineBuf.trim()); lineBuf = ""; }
+                                    });
+                                    if (lineBuf.trim()) lines.push(lineBuf.trim());
+                                    pages.push(lines.join("\n"));
+                                });
                         });
                     })(p);
                 }
