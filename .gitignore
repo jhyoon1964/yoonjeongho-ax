@@ -1,4 +1,5 @@
 .vercel
+node_modules/
 
 # 로컬 전용 (배포 제외)
 yoonjungho-qr.png
