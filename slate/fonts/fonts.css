@@ -1,0 +1,85 @@
+/* ==========================================================
+   SLATE — Webfonts
+   ========================================================== */
+
+/* PRIMARY: Pretendard
+   The de-facto standard for minimal Korean brand interfaces.
+   Covers full Latin + Hangul with optical weight balance.
+   Served via jsDelivr CDN — no local file required.
+
+   ⚠ SUBSTITUTION NOTE: If the brand has a proprietary typeface,
+   replace these @font-face rules with local file paths pointing
+   to licensed font files in this directory. */
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');
+}
+
+/* MONO: JetBrains Mono
+   Used for prices, SKUs, numerical data, and code.
+   Clean monospaced with excellent legibility at small sizes. */
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxzOumOfAc.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjOumOfAc.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxxOumOfAc.woff2') format('woff2');
+}
+
+/* ── Usage notes ────────────────────────────────────────────
+   --font-sans  → 'Pretendard' — all body, heading, UI copy
+   --font-mono  → 'JetBrains Mono' — prices, IDs, data
+   ─────────────────────────────────────────────────────────── */

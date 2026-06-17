@@ -1,0 +1,87 @@
+/* ==========================================================
+   SLATE — Color Tokens
+   ========================================================== */
+
+:root {
+
+  /* ── Brand Primitives ──────────────────────────────────── */
+  --slate-charcoal:      #1E1E1E;
+  --slate-ice-blue:      #A8C8D8;
+  --slate-off-white:     #F5F5F3;
+
+  /* ── Charcoal Scale ────────────────────────────────────── */
+  --slate-charcoal-95:   #121212;
+  --slate-charcoal-80:   #333333;
+  --slate-charcoal-60:   #5A5A5A;
+  --slate-charcoal-40:   #8A8A8A;
+  --slate-charcoal-20:   #BEBEBE;
+  --slate-charcoal-10:   #E0E0E0;
+  --slate-charcoal-05:   #F0F0EF;
+
+  /* ── Ice Blue Scale ────────────────────────────────────── */
+  --slate-ice-blue-dark: #7AAFC4;
+  --slate-ice-blue-mid:  #A8C8D8;
+  --slate-ice-blue-soft: #C8DFEA;
+  --slate-ice-blue-pale: #E4EFF5;
+  --slate-ice-blue-mist: #F0F7FA;
+
+  /* ── Off-white Scale ───────────────────────────────────── */
+  --slate-white-pure:    #FFFFFF;
+  --slate-off-white:     #F5F5F3;
+  --slate-warm-gray:     #EAEAE8;
+  --slate-stone:         #D5D5D2;
+
+  /* ── Semantic — Surface ────────────────────────────────── */
+  --surface-default:     var(--slate-off-white);
+  --surface-elevated:    var(--slate-white-pure);
+  --surface-sunken:      var(--slate-warm-gray);
+  --surface-inverse:     var(--slate-charcoal);
+  --surface-accent:      var(--slate-ice-blue);
+  --surface-accent-pale: var(--slate-ice-blue-mist);
+
+  /* ── Semantic — Foreground ─────────────────────────────── */
+  --fg-primary:          var(--slate-charcoal);
+  --fg-secondary:        var(--slate-charcoal-60);
+  --fg-tertiary:         var(--slate-charcoal-40);
+  --fg-disabled:         var(--slate-charcoal-20);
+  --fg-inverse:          var(--slate-off-white);
+  --fg-accent:           var(--slate-ice-blue-dark);
+  --fg-on-accent:        var(--slate-charcoal);
+
+  /* ── Semantic — Border ─────────────────────────────────── */
+  --border-default:      var(--slate-charcoal-10);
+  --border-strong:       var(--slate-charcoal-20);
+  --border-stronger:     var(--slate-charcoal-40);
+  --border-inverse:      rgba(245, 245, 243, 0.2);
+  --border-accent:       var(--slate-ice-blue);
+
+  /* ── Semantic — Interactive ────────────────────────────── */
+  --interactive-primary:         var(--slate-charcoal);
+  --interactive-primary-hover:   var(--slate-charcoal-80);
+  --interactive-primary-active:  var(--slate-charcoal-95);
+
+  --interactive-accent:          var(--slate-ice-blue);
+  --interactive-accent-hover:    var(--slate-ice-blue-dark);
+  --interactive-accent-active:   #6A9FB4;
+
+  --interactive-ghost-hover:     var(--slate-charcoal-05);
+  --interactive-ghost-active:    var(--slate-charcoal-10);
+
+  /* ── Semantic — Status ─────────────────────────────────── */
+  --status-success:      #2E7D57;
+  --status-success-bg:   #EAF4EE;
+  --status-warning:      #8A6A1A;
+  --status-warning-bg:   #FBF3E0;
+  --status-error:        #9B2C2C;
+  --status-error-bg:     #FAEAEA;
+  --status-info:         var(--slate-ice-blue-dark);
+  --status-info-bg:      var(--slate-ice-blue-mist);
+
+  /* ── Transparency Overlays ─────────────────────────────── */
+  --overlay-dark-sm:     rgba(30, 30, 30, 0.25);
+  --overlay-dark-md:     rgba(30, 30, 30, 0.50);
+  --overlay-dark-lg:     rgba(30, 30, 30, 0.75);
+  --overlay-light-sm:    rgba(245, 245, 243, 0.25);
+  --overlay-light-md:    rgba(245, 245, 243, 0.50);
+  --overlay-light-lg:    rgba(245, 245, 243, 0.85);
+}

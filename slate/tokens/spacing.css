@@ -1,0 +1,67 @@
+/* ==========================================================
+   SLATE — Spacing Tokens
+   ========================================================== */
+
+/* Base unit: 4px. Scale is multiplicative.
+   Slate favors generous whitespace — use larger steps liberally. */
+
+:root {
+
+  /* ── Primitive Scale ───────────────────────────────────── */
+  --space-0:    0px;
+  --space-1:    4px;
+  --space-2:    8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+  --space-14:   56px;
+  --space-16:   64px;
+  --space-20:   80px;
+  --space-24:   96px;
+  --space-28:   112px;
+  --space-32:   128px;
+  --space-40:   160px;
+  --space-48:   192px;
+  --space-56:   224px;
+  --space-64:   256px;
+
+  /* ── Semantic — Component Internal ────────────────────── */
+  --gap-xs:     var(--space-1);   /* 4px  — tight chip gaps */
+  --gap-sm:     var(--space-2);   /* 8px  — icon-to-label */
+  --gap-md:     var(--space-4);   /* 16px — standard form gap */
+  --gap-lg:     var(--space-6);   /* 24px — card internals */
+  --gap-xl:     var(--space-8);   /* 32px — section internals */
+
+  /* ── Semantic — Padding ────────────────────────────────── */
+  --pad-xs:     var(--space-2);   /* 8px  — badge / chip */
+  --pad-sm:     var(--space-3);   /* 12px — compact button */
+  --pad-md:     var(--space-4);   /* 16px — default button */
+  --pad-lg:     var(--space-6);   /* 24px — card padding */
+  --pad-xl:     var(--space-10);  /* 40px — section padding */
+  --pad-2xl:    var(--space-16);  /* 64px — hero padding */
+
+  /* ── Semantic — Section / Layout ──────────────────────── */
+  --section-gap-sm:    var(--space-16);   /* 64px  — tight sections */
+  --section-gap-md:    var(--space-24);   /* 96px  — standard */
+  --section-gap-lg:    var(--space-40);   /* 160px — editorial breathing room */
+
+  /* ── Page Margins ──────────────────────────────────────── */
+  --page-margin-mobile:  var(--space-4);    /* 16px */
+  --page-margin-tablet:  var(--space-8);    /* 32px */
+  --page-margin-desktop: var(--space-20);   /* 80px */
+  --page-margin-wide:    var(--space-32);   /* 128px */
+
+  /* ── Max Widths ────────────────────────────────────────── */
+  --max-width-content: 720px;    /* long-form text */
+  --max-width-ui:      1200px;   /* standard layout */
+  --max-width-wide:    1440px;   /* editorial / full-bleed context */
+
+  /* ── Touch Targets ─────────────────────────────────────── */
+  --touch-target-min: 44px;      /* minimum for mobile tappability */
+  --touch-target-md:  48px;      /* standard button height */
+  --touch-target-lg:  56px;      /* CTA / primary buttons */
+}

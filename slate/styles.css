@@ -1,0 +1,19 @@
+/* ==========================================================
+   SLATE Design System — Global Stylesheet Entry Point
+   ----------------------------------------------------------
+   Import order matters:
+   1. Fonts (defines @font-face before any usage)
+   2. Token files (establish CSS custom properties)
+   3. Base reset (consumes tokens)
+   ========================================================== */
+
+@import './fonts/fonts.css';
+
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/borders.css';
+@import './tokens/shadows.css';
+@import './tokens/motion.css';
+
+@import './base/reset.css';

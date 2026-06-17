@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Slate — Kiosk</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="shop.css">
+</head>
+<body>
+<div class="kiosk-stage">
+  <div class="kiosk">
+    <div class="kiosk-header">
+      <div class="kiosk-header__logo" data-home>SLATE</div>
+      <div class="kiosk-header__loc">팝업 스토어 · 성수동</div>
+      <div class="kiosk-header__actions">
+        <button class="kiosk-header__search" aria-label="검색"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+        <button class="kiosk-header__cart" data-cart>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          구매 목록
+          <span class="kiosk-header__cart-badge" id="kioskBadge" hidden>0</span>
+        </button>
+      </div>
+    </div>
+    <div id="kioskBody"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const PRODUCTS = [
+    { id:1, name:'메리노 립 니트', brand:'SLATE',  price:'₩128,000', badge:'New In', color:'#D8CDBE', cat:'Women' },
+    { id:2, name:'울 트렌치 코트', brand:'SLATE',  price:'₩189,000', origPrice:'₩289,000', badge:'Sale', sale:true, color:'#B8BAC0', cat:'Women' },
+    { id:3, name:'실크 블라우스',   brand:'SLATE',  price:'₩98,000',  color:'#E4DDD4', cat:'Women' },
+    { id:4, name:'카시미어 스카프', brand:'SLATE',  price:'₩158,000', badge:'New In', color:'#C8C4BC', cat:'Women' },
+    { id:5, name:'세라믹 화병 소', brand:'OBJECT', price:'₩68,000',  color:'#D5DDD8', cat:'Home' },
+    { id:6, name:'린넨 쿠션 커버', brand:'OBJECT', price:'₩45,000',  color:'#E0DBD4', cat:'Home' },
+    { id:7, name:'울 팬츠',        brand:'SLATE',  price:'₩148,000', color:'#B4B8BE', cat:'Men' },
+    { id:8, name:'오크 트레이',    brand:'OBJECT', price:'₩52,000',  badge:'Sold Out', color:'#C8BEA8', cat:'Home' },
+  ];
+  const CATS = ['All','Women','Men','Home'];
+  const SIZES = ['XS','S','M','L','XL'];
+  const SOLD_OUT = ['XS','XL'];
+
+  const state = { screen:'browse', cat:'All', product:null, size:null, cart:[], done:false };
+  const body = document.getElementById('kioskBody');
+
+  const backIco = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`;
+  const checkIco = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+  function browse() {
+    const filtered = state.cat==='All' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===state.cat);
+    const cats = CATS.map(c => `<button class="kiosk-cat ${state.cat===c?'is-active':''}" data-cat="${c}">${c}</button>`).join('');
+    const cards = filtered.map(p => `
+      <div class="kiosk-card" data-product="${p.id}">
+        <div class="kiosk-card__img" style="background:${p.color}">
+          ${p.badge ? `<span class="tag ${p.sale?'tag--sale':''}">${p.badge}</span>` : ''}
+        </div>
+        <div class="kiosk-card__body">
+          <div class="kiosk-card__brand">${p.brand}</div>
+          <div class="kiosk-card__name">${p.name}</div>
+          <div class="kiosk-card__price-row"><span class="u-price ${p.sale?'u-price--sale':''}">${p.price}</span>${p.origPrice?`<span class="u-price-orig">${p.origPrice}</span>`:''}</div>
+        </div>
+      </div>`).join('');
+    return `<div class="kiosk-screen">
+      <div class="kiosk-cats">${cats}</div>
+      <div class="kiosk-grid">${cards}</div>
+    </div>`;
+  }
+
+  function product() {
+    const p = state.product;
+    const sizes = SIZES.map(sz => {
+      const so = SOLD_OUT.includes(sz);
+      return `<button class="size-btn ${so?'is-soldout':''} ${state.size===sz?'is-active':''}" data-size="${sz}" ${so?'disabled':''}>${sz}</button>`;
+    }).join('');
+    return `<div class="kiosk-pdp">
+      <div class="kiosk-pdp__img" style="background:${p.color}">
+        <button class="kiosk-pdp__back" data-back>${backIco} 목록으로</button>
+        <div class="kiosk-pdp__img-ph"><span>Product Image</span></div>
+      </div>
+      <div class="kiosk-pdp__info">
+        <div class="kiosk-pdp__brand">${p.brand}</div>
+        <div class="kiosk-pdp__name">${p.name}</div>
+        <div class="kiosk-pdp__price-row"><span class="u-price ${p.sale?'u-price--sale':''}">${p.price}</span>${p.origPrice?`<span class="u-price-orig">${p.origPrice}</span>`:''}</div>
+        <hr>
+        <div class="section-label">사이즈 선택</div>
+        <div class="kiosk-pdp__sizes" id="kioskSizes">${sizes}</div>
+        <p class="kiosk-pdp__desc">유연하고 따뜻한 메리노 울로 완성된 립 니트. 타이트한 립 패턴이 실루엣을 정돈하며, 계절이 바뀌어도 꺼내 입게 되는 기본기를 갖췄습니다.</p>
+        <div class="kiosk-pdp__detail">소재: 울 100% &nbsp;·&nbsp; 원산지: 이탈리아<br>드라이클리닝 권장 &nbsp;·&nbsp; 모델 착용: S 사이즈 (175cm, 60kg)</div>
+        <button class="btn kiosk-pdp__add is-disabled" id="kioskAdd">사이즈를 먼저 선택하세요</button>
+      </div>
+    </div>`;
+  }
+
+  function cart() {
+    if (state.done) {
+      return `<div class="kiosk-done">
+        <div class="kiosk-done__check">${checkIco}</div>
+        <div class="kiosk-done__title">주문이 완료되었습니다</div>
+        <div class="kiosk-done__sub">결제 영수증을 이메일로 보내드립니다</div>
+        <button class="btn" data-home>처음으로</button>
+      </div>`;
+    }
+    const total = state.cart.reduce((s,p)=>s+parseInt(p.price.replace(/[^\d]/g,''),10),0);
+    const items = state.cart.length ? state.cart.map(p => `
+      <div class="kiosk-cart__row">
+        <div class="kiosk-cart__thumb" style="background:${p.color}"></div>
+        <div style="flex:1">
+          <div class="brand">${p.brand}</div>
+          <div class="name">${p.name}</div>
+          <div class="size">사이즈: ${p.size}</div>
+          <div class="price">${p.price}</div>
+        </div>
+      </div>`).join('') : `<div class="kiosk-cart__empty">구매 목록이 비어있습니다</div>`;
+    const summary = state.cart.length ? `
+      <div class="kiosk-summary">
+        <div class="kiosk-summary__title">주문 요약</div>
+        <div class="kiosk-summary__rows">
+          <div class="kiosk-summary__row"><span>상품 합계</span><span>₩${total.toLocaleString()}</span></div>
+          <div class="kiosk-summary__row"><span>배송비</span><span>무료</span></div>
+          <div class="kiosk-summary__row"><span>할인</span><span>-</span></div>
+          <hr style="margin:20px 0">
+          <div class="kiosk-summary__total"><span>합계</span><span>₩${total.toLocaleString()}</span></div>
+        </div>
+        <button class="btn kiosk-summary__pay" data-pay>결제하기</button>
+        <div class="kiosk-summary__methods">카드 결제 · 카카오페이 · 네이버페이</div>
+      </div>` : '';
+    return `<div class="kiosk-cart">
+      <div class="kiosk-cart__head">
+        <button class="kiosk-cart__back" data-back>${backIco} 돌아가기</button>
+        <h2>구매 목록</h2><span class="count">${state.cart.length}개 상품</span>
+      </div>
+      <div class="kiosk-cart__body">
+        <div class="kiosk-cart__items">${items}</div>
+        ${summary}
+      </div>
+    </div>`;
+  }
+
+  function updateBadge() {
+    const b = document.getElementById('kioskBadge');
+    if (state.cart.length) { b.hidden=false; b.textContent=state.cart.length; } else b.hidden=true;
+  }
+
+  function render() {
+    if (state.screen==='browse') body.innerHTML = browse();
+    else if (state.screen==='product') body.innerHTML = product();
+    else body.innerHTML = cart();
+    updateBadge();
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-home]')) { state.screen='browse'; state.product=null; state.done=false; return render(); }
+    if (e.target.closest('[data-cart]')) { state.screen='cart'; return render(); }
+    if (e.target.closest('[data-back]')) { state.screen='browse'; state.product=null; state.size=null; return render(); }
+    if (e.target.closest('[data-pay]')) { state.done=true; return render(); }
+    const catEl = e.target.closest('[data-cat]');
+    if (catEl) { state.cat=catEl.dataset.cat; return render(); }
+    const card = e.target.closest('[data-product]');
+    if (card) { state.product=PRODUCTS.find(p=>p.id===Number(card.dataset.product)); state.size=null; state.screen='product'; return render(); }
+    const sizeEl = e.target.closest('[data-size]');
+    if (sizeEl && !sizeEl.disabled) {
+      state.size=sizeEl.dataset.size;
+      document.querySelectorAll('#kioskSizes .size-btn').forEach(b=>b.classList.toggle('is-active', b===sizeEl));
+      const add=document.getElementById('kioskAdd');
+      add.classList.remove('is-disabled'); add.textContent='구매 목록에 담기';
+      return;
+    }
+    if (e.target.closest('#kioskAdd')) {
+      if (!state.size) return;
+      const add=document.getElementById('kioskAdd');
+      state.cart.push({ ...state.product, size:state.size });
+      add.classList.add('is-success'); add.innerHTML = '구매 목록에 추가됨';
+      updateBadge();
+      setTimeout(()=>{ state.screen='browse'; state.product=null; state.size=null; render(); }, 1600);
+      return;
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

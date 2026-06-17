@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slate — Mobile App</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="shop.css">
+</head>
+<body>
+<div class="app-stage">
+  <div class="ios">
+    <div class="ios__island"></div>
+    <div class="ios__statusbar">
+      <span class="ios__time">9:41</span>
+      <span aria-hidden="true">
+        <svg width="19" height="12" viewBox="0 0 19 12" style="margin-right:6px"><rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill="#000"/><rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill="#000"/><rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill="#000"/><rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill="#000"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke="#000" stroke-opacity="0.35" fill="none"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#000"/><path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" fill="#000" fill-opacity="0.4"/></svg>
+      </span>
+    </div>
+    <div class="ios__screen">
+      <div class="ios__topbar"><div class="ios__title" id="appTitle">SLATE</div></div>
+      <div class="ios__body" id="appBody"></div>
+      <div class="ios__home-indicator"><i></i></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const PRODUCTS = [
+    { id:1, name:'메리노 립 니트', brand:'SLATE',  price:'₩128,000', badge:'New In', color:'#D8CDBE' },
+    { id:2, name:'울 트렌치 코트', brand:'SLATE',  price:'₩189,000', origPrice:'₩289,000', badge:'Sale', sale:true, color:'#B8BAC0' },
+    { id:3, name:'실크 블라우스',   brand:'SLATE',  price:'₩98,000',  color:'#E4DDD4' },
+    { id:4, name:'카시미어 스카프', brand:'SLATE',  price:'₩158,000', badge:'New In', color:'#C8C4BC' },
+    { id:5, name:'세라믹 화병 소', brand:'OBJECT', price:'₩68,000',  color:'#D5DDD8' },
+    { id:6, name:'린넨 쿠션 커버', brand:'OBJECT', price:'₩45,000',  color:'#E0DBD4' },
+  ];
+  const SIZES = ['XS','S','M','L','XL'];
+  const SOLD_OUT = ['XS','XL'];
+  const NAV = [
+    { id:'home', label:'홈',   icon:'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z|M9 22V12h6v10' },
+    { id:'shop', label:'쇼핑', icon:'circle:11,11,8|line:21,21,16.65,16.65' },
+    { id:'wish', label:'위시', icon:'heart' },
+    { id:'bag',  label:'가방', icon:'M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z|line:3,6,21,6|M16 10a4 4 0 0 1-8 0' },
+    { id:'my',   label:'마이', icon:'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2|circle:12,7,4' },
+  ];
+
+  const state = { tab:'home', product:null, cart:[], size:null };
+  const body = document.getElementById('appBody');
+  const titleEl = document.getElementById('appTitle');
+
+  function ico(spec) {
+    const parts = spec.split('|').map(p => {
+      if (p.startsWith('circle:')) { const [x,y,r]=p.slice(7).split(','); return `<circle cx="${x}" cy="${y}" r="${r}"/>`; }
+      if (p.startsWith('line:')) { const [x1,y1,x2,y2]=p.slice(5).split(','); return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`; }
+      if (p === 'heart') return `<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>`;
+      return `<path d="${p}"/>`;
+    }).join('');
+    return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${parts}</svg>`;
+  }
+  const searchIco = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+  const backIco = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`;
+
+  function bottomNav() {
+    return `<div class="bottom-nav">${NAV.map(n => `
+      <button class="bottom-nav__item ${state.tab===n.id?'is-active':''}" data-tab="${n.id}">
+        ${ico(n.icon)}
+        <span>${n.label}</span>
+        ${n.id==='bag' && state.cart.length ? `<span class="bottom-nav__badge">${state.cart.length}</span>` : ''}
+      </button>`).join('')}</div>`;
+  }
+
+  function home() {
+    const cards = PRODUCTS.slice(0,4).map(p => `
+      <div class="app-card" data-product="${p.id}">
+        <div class="app-card__img" style="background:${p.color}">
+          ${p.badge ? `<span class="tag ${p.sale?'tag--sale':''}">${p.badge}</span>` : ''}
+        </div>
+        <div class="app-card__brand">${p.brand}</div>
+        <div class="app-card__name">${p.name}</div>
+        <div class="app-card__price" style="${p.sale?'color:var(--status-error)':''}">${p.price}</div>
+      </div>`).join('');
+    return `<div>
+      <div class="app-search"><div class="app-search__box">${searchIco}<span>브랜드, 소재, 컬러로 검색</span></div></div>
+      <div class="app-hero">
+        <div class="app-hero__eyebrow">SS 2026</div>
+        <div class="app-hero__title">New<br><em>Season.</em></div>
+        <div class="app-hero__cta">컬렉션 보기 →</div>
+      </div>
+      <div class="app-section">
+        <div class="app-section__head"><span class="app-section__title">이번 주 신상</span><span class="app-section__more">전체 보기</span></div>
+        <div class="app-grid">${cards}</div>
+      </div>
+      <div class="app-editorial">
+        <div class="app-editorial__eyebrow">Object</div>
+        <div class="app-editorial__title">인테리어<br>오브제</div>
+        <div class="app-editorial__more">컬렉션 보기 →</div>
+      </div>
+    </div>`;
+  }
+
+  function pdp() {
+    const p = state.product;
+    const sizes = SIZES.map(sz => {
+      const so = SOLD_OUT.includes(sz);
+      return `<button class="size-btn ${so?'is-soldout':''} ${state.size===sz?'is-active':''}" data-size="${sz}" ${so?'disabled':''}>${sz}</button>`;
+    }).join('');
+    return `<div>
+      <div class="app-pdp__backbar"><button class="icon-btn" data-back>${backIco}</button><span>상품 상세</span></div>
+      <div class="app-pdp__img" style="background:${p.color}"></div>
+      <div class="app-pdp__info">
+        <div class="app-pdp__brand">${p.brand}</div>
+        <div class="app-pdp__name">${p.name}</div>
+        <div class="app-pdp__price-row"><span class="u-price ${p.sale?'u-price--sale':''}">${p.price}</span>${p.origPrice?`<span class="u-price-orig">${p.origPrice}</span>`:''}</div>
+        <div class="app-pdp__sizes">
+          <div class="section-label">사이즈</div>
+          <div class="size-grid" id="appSizes">${sizes}</div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:var(--fg-secondary);margin-bottom:20px">유연하고 따뜻한 메리노 울로 완성된 립 니트. 타이트한 립 패턴이 실루엣을 정돈합니다.</p>
+        <div style="font-size:12px;color:var(--fg-tertiary);line-height:1.6">소재: 울 100% &nbsp;·&nbsp; 원산지: 이탈리아</div>
+      </div>
+      <div class="app-pdp__cta">
+        <button class="btn is-disabled" id="appAdd">사이즈를 선택하세요</button>
+      </div>
+    </div>`;
+  }
+
+  function cart() {
+    if (!state.cart.length) {
+      return `<div style="padding-bottom:80px">
+        <div class="app-cart__head"><h2>장바구니</h2><p>0개 상품</p></div>
+        <div class="app-cart__empty">장바구니가 비어있습니다</div>
+      </div>` + '';
+    }
+    const total = state.cart.reduce((s,p)=>s+parseInt(p.price.replace(/[^\d]/g,''),10),0);
+    const rows = state.cart.map(p => `
+      <div class="app-cart__row">
+        <div class="app-cart__thumb" style="background:${p.color}"></div>
+        <div style="flex:1">
+          <div class="app-card__brand">${p.brand}</div>
+          <div class="app-card__name" style="margin-bottom:6px">${p.name}</div>
+          <div class="u-price">${p.price}</div>
+        </div>
+      </div>`).join('');
+    return `<div>
+      <div class="app-cart__head"><h2>장바구니</h2><p>${state.cart.length}개 상품</p></div>
+      ${rows}
+      <div class="app-cart__total"><span>합계</span><span>₩${total.toLocaleString()}</span></div>
+      <div class="app-cart__checkout"><button class="btn">구매하기</button></div>
+    </div>`;
+  }
+
+  function render() {
+    let content;
+    if (state.product) { content = pdp(); titleEl.textContent = state.product.name; }
+    else if (state.tab === 'home') { content = home(); titleEl.textContent = 'SLATE'; }
+    else if (state.tab === 'bag') { content = cart(); titleEl.textContent = '장바구니'; }
+    else { content = `<div class="app-placeholder">준비 중입니다</div>`; titleEl.textContent = state.tab.charAt(0).toUpperCase()+state.tab.slice(1); }
+    body.innerHTML = `<div class="ios__scroll">${content}</div>` + (state.product ? '' : bottomNav());
+  }
+
+  body.addEventListener('click', (e) => {
+    const tabEl = e.target.closest('[data-tab]');
+    if (tabEl) { state.tab = tabEl.dataset.tab; state.product = null; state.size = null; return render(); }
+    if (e.target.closest('[data-back]')) { state.product = null; state.size = null; return render(); }
+    const card = e.target.closest('[data-product]');
+    if (card) { state.product = PRODUCTS.find(p=>p.id===Number(card.dataset.product)); state.size=null; return render(); }
+    const sizeEl = e.target.closest('[data-size]');
+    if (sizeEl && !sizeEl.disabled) {
+      state.size = sizeEl.dataset.size;
+      document.querySelectorAll('#appSizes .size-btn').forEach(b=>b.classList.toggle('is-active', b===sizeEl));
+      const add = document.getElementById('appAdd');
+      add.classList.remove('is-disabled'); add.textContent = '장바구니 담기';
+      return;
+    }
+    if (e.target.closest('#appAdd')) {
+      const add = document.getElementById('appAdd');
+      if (!state.size) return;
+      state.cart.push(state.product);
+      add.classList.add('is-success'); add.textContent = '장바구니에 담겼습니다 ✓';
+      setTimeout(()=>{ add.classList.remove('is-success'); add.textContent='장바구니 담기'; }, 1800);
+      return;
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

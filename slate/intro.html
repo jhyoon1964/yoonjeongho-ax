@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slate — SS 2026 신상 컬렉션 (15초 인트로)</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ======================================================
+     SLATE — 15s brand intro reel
+     Text-animation only. Charcoal canvas, single ice-blue
+     accent per scene. Motion follows the DS tokens:
+     ease-out cubic-bezier(0,0,0.2,1), no bounce, no spring.
+     One 15s master clock → every keyframe is mapped in
+     absolute % of 15s (1s = 6.667%).
+     ====================================================== */
+
+  :root { --reel-ease: cubic-bezier(0, 0, 0.2, 1); }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: #0C0C0C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .frame {
+    position: relative;
+    width: min(96vw, 170.6vh);     /* 16:9 */
+    aspect-ratio: 16 / 9;
+    background: var(--slate-charcoal);
+    overflow: hidden;
+    container-type: inline-size;   /* enable cqw sizing */
+    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+  }
+
+  /* hairline brand frame (static, very subtle) */
+  .frame::after {
+    content: "";
+    position: absolute;
+    inset: 3.2cqw;
+    border: 1px solid rgba(245, 245, 243, 0.10);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* corner station id */
+  .station {
+    position: absolute;
+    top: 4.6cqw; left: 5.2cqw;
+    font-size: 1.05cqw;
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: rgba(168, 200, 216, 0.7);   /* ice blue */
+    z-index: 6;
+    opacity: 0;
+  }
+  .reel.run .station { animation: fadeHold 15s linear both; }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .rise { opacity: 0; }
+  .reel.run .rise { animation: riseIn 0.9s var(--reel-ease) both; }
+
+  /* ── Scene 1 — brand open ─────────────────────────────── */
+  .eyebrow {
+    font-size: 1.45cqw;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--slate-ice-blue);
+    margin-bottom: 3cqw;
+  }
+  .wordmark {
+    font-size: 12cqw;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--slate-off-white);
+    line-height: 1;
+  }
+  .reel.run .scene--1 { animation: scene1 15s linear both; }
+  .reel.run .scene--1 .eyebrow  { animation-delay: 0.5s; }
+  .reel.run .scene--1 .wordmark { animation-delay: 0.85s; }
+
+  /* ── Scene 2 — New Season ─────────────────────────────── */
+  .display {
+    font-size: 11cqw;
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+    color: var(--slate-off-white);
+  }
+  .display em {
+    font-style: italic;
+    color: var(--slate-ice-blue);
+  }
+  .rule {
+    height: 1px;
+    width: 22cqw;
+    margin-top: 3.4cqw;
+    background: var(--slate-ice-blue);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  .reel.run .scene--2 { animation: scene2 15s linear both; }
+  .reel.run .scene--2 .display .l1 { animation-delay: 3.55s; }
+  .reel.run .scene--2 .display .l2 { animation-delay: 3.85s; }
+  .reel.run .scene--2 .rule { animation: growX 0.7s var(--reel-ease) both; animation-delay: 4.2s; }
+
+  /* ── Scene 3 — new arrivals ───────────────────────────── */
+  .arr-label {
+    font-size: 1.3cqw;
+    font-weight: 600;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: rgba(245, 245, 243, 0.55);
+    margin-bottom: 3.6cqw;
+  }
+  .arr-list { display: flex; flex-direction: column; gap: 2.4cqw; width: 46cqw; }
+  .arr {
+    display: flex;
+    align-items: center;
+    gap: 2.4cqw;
+    border-bottom: 1px solid rgba(245, 245, 243, 0.12);
+    padding-bottom: 2.2cqw;
+  }
+  .arr__sw { width: 4.4cqw; height: 4.4cqw; flex-shrink: 0; }
+  .arr__name {
+    font-size: 2.9cqw;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: var(--slate-off-white);
+    flex: 1;
+    text-align: left;
+  }
+  .arr__price {
+    font-family: var(--font-mono);
+    font-size: 2.1cqw;
+    color: var(--slate-ice-blue);
+  }
+  .reel.run .scene--3 { animation: scene3 15s linear both; }
+  .reel.run .scene--3 .arr-label { animation-delay: 7.0s; }
+  .reel.run .scene--3 .arr:nth-child(1) { animation-delay: 7.4s; }
+  .reel.run .scene--3 .arr:nth-child(2) { animation-delay: 7.8s; }
+  .reel.run .scene--3 .arr:nth-child(3) { animation-delay: 8.2s; }
+
+  /* ── Scene 4 — tagline ────────────────────────────────── */
+  .tagline {
+    font-size: 3.6cqw;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+    color: var(--slate-off-white);
+    max-width: 60cqw;
+  }
+  .tagline b { font-weight: 300; color: var(--slate-ice-blue); }
+  .reel.run .scene--4 { animation: scene4 15s linear both; }
+  .reel.run .scene--4 .tagline { animation-delay: 11.4s; }
+
+  /* ── Scene 5 — close ──────────────────────────────────── */
+  .wordmark--end {
+    font-size: 9cqw;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    color: var(--slate-off-white);
+    line-height: 1;
+  }
+  .cta {
+    margin-top: 3cqw;
+    font-size: 1.5cqw;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--slate-ice-blue);
+  }
+  .reel.run .scene--5 { animation: scene5 15s linear both; }
+  .reel.run .scene--5 .wordmark--end { animation-delay: 13.45s; }
+  .reel.run .scene--5 .cta { animation-delay: 13.9s; }
+
+  /* ── progress bar ─────────────────────────────────────── */
+  .progress {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 2px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--slate-ice-blue);
+    z-index: 7;
+  }
+  .reel.run .progress { animation: progress 15s linear forwards; }
+
+  /* ── replay control (shown after the reel ends) ───────── */
+  .replay {
+    position: absolute;
+    bottom: 4.4cqw; right: 5.2cqw;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8cqw;
+    font-family: var(--font-sans);
+    font-size: 1.15cqw;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245, 245, 243, 0.7);
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 8;
+    transition: color var(--duration-fast) var(--reel-ease);
+  }
+  .replay svg { width: 1.6cqw; height: 1.6cqw; }
+  .replay:hover { color: var(--slate-ice-blue); }
+  .reel.run .replay { animation: replayIn 15s linear both; }
+
+  /* ════════ keyframes — shared ════════ */
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(1.2cqw); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes growX  { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes fadeHold {
+    0% { opacity: 0; } 3% { opacity: 0; } 6% { opacity: 1; }
+    94% { opacity: 1; } 100% { opacity: 0.85; }
+  }
+  @keyframes replayIn { 0%,96%{opacity:0;} 99%,100%{opacity:1;} }
+
+  /* ════════ keyframes — scene opacity (absolute % of 15s) ════════ */
+  @keyframes scene1 { 0%{opacity:0} 1.33%{opacity:0} 4%{opacity:1} 18%{opacity:1} 20.67%{opacity:0} 100%{opacity:0} }
+  @keyframes scene2 { 0%{opacity:0} 22%{opacity:0} 24.67%{opacity:1} 42.67%{opacity:1} 45.33%{opacity:0} 100%{opacity:0} }
+  @keyframes scene3 { 0%{opacity:0} 46%{opacity:0} 48.67%{opacity:1} 70%{opacity:1} 73.33%{opacity:0} 100%{opacity:0} }
+  @keyframes scene4 { 0%{opacity:0} 74%{opacity:0} 76.67%{opacity:1} 84.67%{opacity:1} 87.33%{opacity:0} 100%{opacity:0} }
+  @keyframes scene5 { 0%{opacity:0} 88%{opacity:0} 90.67%{opacity:1} 100%{opacity:1} }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene, .rise, .station { opacity: 1 !important; animation: none !important; }
+    .scene { position: static; }                /* stack statically */
+    .rule, .progress { transform: scaleX(1); }
+    .frame { aspect-ratio: auto; height: auto; padding: 6cqw 0; }
+    .replay { opacity: 1; position: static; margin: 4cqw auto 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="frame reel run" id="reel" title="클릭하면 다시 재생">
+  <span class="station">Slate · SS 2026</span>
+
+  <!-- 1 — brand open -->
+  <section class="scene scene--1">
+    <span class="eyebrow rise">SS 2026 Collection</span>
+    <span class="wordmark rise">SLATE</span>
+  </section>
+
+  <!-- 2 — New Season -->
+  <section class="scene scene--2">
+    <h1 class="display"><span class="l1 rise">New</span><br><em class="l2 rise">Season.</em></h1>
+    <span class="rule"></span>
+  </section>
+
+  <!-- 3 — new arrivals -->
+  <section class="scene scene--3">
+    <span class="arr-label rise">이번 주 신상 · New in</span>
+    <div class="arr-list">
+      <div class="arr rise"><span class="arr__sw" style="background:#D8CDBE"></span><span class="arr__name">메리노 립 니트</span><span class="arr__price">₩128,000</span></div>
+      <div class="arr rise"><span class="arr__sw" style="background:#B8BAC0"></span><span class="arr__name">울 트렌치 코트</span><span class="arr__price">₩189,000</span></div>
+      <div class="arr rise"><span class="arr__sw" style="background:#C8C4BC"></span><span class="arr__name">카시미어 스카프</span><span class="arr__price">₩158,000</span></div>
+    </div>
+  </section>
+
+  <!-- 4 — tagline -->
+  <section class="scene scene--4">
+    <p class="tagline rise">불필요한 것을 걷어낸 <b>쇼핑 경험.</b></p>
+  </section>
+
+  <!-- 5 — close -->
+  <section class="scene scene--5">
+    <span class="wordmark--end rise">SLATE</span>
+    <span class="cta rise">지금 만나보세요</span>
+  </section>
+
+  <div class="progress"></div>
+  <button class="replay" id="replay" type="button" aria-label="다시 재생">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    다시 보기
+  </button>
+</div>
+
+<script>
+  const reel = document.getElementById('reel');
+  function replay() {
+    reel.classList.remove('run');
+    void reel.offsetWidth;            // force reflow → restart every animation
+    reel.classList.add('run');
+  }
+  document.getElementById('replay').addEventListener('click', (e) => { e.stopPropagation(); replay(); });
+  reel.addEventListener('click', replay);
+</script>
+</body>
+</html>

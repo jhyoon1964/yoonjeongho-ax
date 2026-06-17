@@ -1,0 +1,119 @@
+/* ==========================================================
+   SLATE — Typography Tokens
+   ========================================================== */
+
+/* NOTE: Primary typeface is Pretendard (loaded via fonts/fonts.css).
+   It covers both Latin and Korean with optical balance.
+   Mono face is JetBrains Mono for prices, codes, and data. */
+
+:root {
+
+  /* ── Font Families ─────────────────────────────────────── */
+  --font-sans:    'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* ── Font Weights ──────────────────────────────────────── */
+  --weight-light:     300;
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+
+  /* ── Type Scale (px → rem, base 16px) ─────────────────── */
+  --text-2xs:   0.625rem;   /* 10px — labels, legal */
+  --text-xs:    0.75rem;    /* 12px — captions, tags */
+  --text-sm:    0.875rem;   /* 14px — secondary UI text */
+  --text-base:  1rem;       /* 16px — body default */
+  --text-md:    1.125rem;   /* 18px — large body */
+  --text-lg:    1.25rem;    /* 20px — subheadings */
+  --text-xl:    1.5rem;     /* 24px — section headings */
+  --text-2xl:   2rem;       /* 32px — page headings */
+  --text-3xl:   2.5rem;     /* 40px — large display */
+  --text-4xl:   3.5rem;     /* 56px — hero display */
+  --text-5xl:   5rem;       /* 80px — editorial XL */
+
+  /* ── Line Heights ──────────────────────────────────────── */
+  --leading-none:     1;
+  --leading-tight:    1.2;
+  --leading-snug:     1.35;
+  --leading-normal:   1.5;
+  --leading-relaxed:  1.7;
+  --leading-loose:    2;
+
+  /* ── Letter Spacing ────────────────────────────────────── */
+  --tracking-tighter:  -0.04em;
+  --tracking-tight:    -0.02em;
+  --tracking-normal:    0em;
+  --tracking-wide:      0.04em;
+  --tracking-wider:     0.08em;
+  --tracking-widest:    0.16em;
+
+  /* ── Semantic Text Styles ──────────────────────────────── */
+
+  /* Display — editorial headers, hero */
+  --ts-display-xl-size:     var(--text-5xl);
+  --ts-display-xl-weight:   var(--weight-light);
+  --ts-display-xl-leading:  var(--leading-tight);
+  --ts-display-xl-tracking: var(--tracking-tighter);
+
+  --ts-display-lg-size:     var(--text-4xl);
+  --ts-display-lg-weight:   var(--weight-light);
+  --ts-display-lg-leading:  var(--leading-tight);
+  --ts-display-lg-tracking: var(--tracking-tight);
+
+  --ts-display-md-size:     var(--text-3xl);
+  --ts-display-md-weight:   var(--weight-regular);
+  --ts-display-md-leading:  var(--leading-snug);
+  --ts-display-md-tracking: var(--tracking-tight);
+
+  /* Heading — page / section */
+  --ts-heading-lg-size:     var(--text-2xl);
+  --ts-heading-lg-weight:   var(--weight-medium);
+  --ts-heading-lg-leading:  var(--leading-snug);
+  --ts-heading-lg-tracking: var(--tracking-tight);
+
+  --ts-heading-md-size:     var(--text-xl);
+  --ts-heading-md-weight:   var(--weight-medium);
+  --ts-heading-md-leading:  var(--leading-snug);
+  --ts-heading-md-tracking: var(--tracking-normal);
+
+  --ts-heading-sm-size:     var(--text-lg);
+  --ts-heading-sm-weight:   var(--weight-semibold);
+  --ts-heading-sm-leading:  var(--leading-snug);
+  --ts-heading-sm-tracking: var(--tracking-normal);
+
+  /* Body */
+  --ts-body-lg-size:    var(--text-md);
+  --ts-body-lg-weight:  var(--weight-regular);
+  --ts-body-lg-leading: var(--leading-relaxed);
+
+  --ts-body-md-size:    var(--text-base);
+  --ts-body-md-weight:  var(--weight-regular);
+  --ts-body-md-leading: var(--leading-normal);
+
+  --ts-body-sm-size:    var(--text-sm);
+  --ts-body-sm-weight:  var(--weight-regular);
+  --ts-body-sm-leading: var(--leading-normal);
+
+  /* UI / Label */
+  --ts-label-lg-size:     var(--text-sm);
+  --ts-label-lg-weight:   var(--weight-medium);
+  --ts-label-lg-tracking: var(--tracking-wide);
+
+  --ts-label-md-size:     var(--text-xs);
+  --ts-label-md-weight:   var(--weight-medium);
+  --ts-label-md-tracking: var(--tracking-wider);
+
+  --ts-label-sm-size:     var(--text-2xs);
+  --ts-label-sm-weight:   var(--weight-semibold);
+  --ts-label-sm-tracking: var(--tracking-widest);
+
+  /* Price / Number — mono */
+  --ts-price-lg-size:     var(--text-xl);
+  --ts-price-lg-weight:   var(--weight-regular);
+  --ts-price-lg-family:   var(--font-mono);
+
+  --ts-price-md-size:     var(--text-base);
+  --ts-price-md-weight:   var(--weight-regular);
+  --ts-price-md-family:   var(--font-mono);
+}

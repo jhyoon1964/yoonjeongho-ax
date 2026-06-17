@@ -1,0 +1,46 @@
+/* ==========================================================
+   SLATE — Motion & Animation Tokens
+   ========================================================== */
+
+/* Slate uses restrained, purposeful animation.
+   No decorative loops. Transitions should feel precise and controlled —
+   like a well-cut garment, not a bouncy toy.
+   Default: fast fade + subtle translate. No bounce, no spring. */
+
+:root {
+
+  /* ── Duration ──────────────────────────────────────────── */
+  --duration-instant:   0ms;       /* @kind other */
+  --duration-fast:      100ms;     /* @kind other */
+  --duration-base:      180ms;     /* @kind other */
+  --duration-slow:      300ms;     /* @kind other */
+  --duration-slower:    500ms;     /* @kind other */
+  --duration-crawl:     800ms;     /* @kind other */
+
+  /* ── Easing ────────────────────────────────────────────── */
+  --ease-linear:       linear;                        /* @kind other */
+  --ease-in:           cubic-bezier(0.4, 0, 1, 1);   /* @kind other */
+  --ease-out:          cubic-bezier(0, 0, 0.2, 1);   /* @kind other */
+  --ease-in-out:       cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --ease-sharp:        cubic-bezier(0.2, 0, 0, 1);   /* @kind other */
+
+  /* ── Semantic Transitions ──────────────────────────────── */
+  --transition-color:      color var(--duration-fast) var(--ease-out),
+                            background-color var(--duration-fast) var(--ease-out),
+                            border-color var(--duration-fast) var(--ease-out);
+
+  --transition-opacity:    opacity var(--duration-base) var(--ease-out);
+
+  --transition-transform:  transform var(--duration-base) var(--ease-out);
+
+  --transition-all:        all var(--duration-base) var(--ease-out);
+
+  --transition-overlay:    opacity var(--duration-slow) var(--ease-out);
+
+  --transition-slide:      transform var(--duration-slow) var(--ease-sharp),
+                            opacity  var(--duration-slow) var(--ease-out);
+
+  /* ── Hover Translate ───────────────────────────────────── */
+  --hover-lift-y:   -2px;   /* subtle Y shift on card hover */
+  --hover-lift-img: -4px;   /* image hover lift */
+}

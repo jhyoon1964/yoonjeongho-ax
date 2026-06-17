@@ -1,0 +1,41 @@
+/* ==========================================================
+   SLATE — Border & Radius Tokens
+   ========================================================== */
+
+/* Slate uses sharp corners as a deliberate visual signature.
+   Border radius is intentionally 0 across all components.
+   Exceptions are noted explicitly and should be rare. */
+
+:root {
+
+  /* ── Border Radius ─────────────────────────────────────── */
+  --radius-none:   0px;    /* ← default — Slate's signature */
+  --radius-sm:     2px;    /* subtle softening, use sparingly */
+  --radius-full:   9999px; /* pills — only for tags/badges if needed */
+
+  /* ── Border Width ──────────────────────────────────────── */
+  --border-0:    0px;
+  --border-1:    1px;   /* ← default — hairline */
+  --border-2:    2px;   /* emphasis borders */
+  --border-4:    4px;   /* accent / focus ring */
+
+  /* ── Border Style ──────────────────────────────────────── */
+  --border-style-default: solid; /* @kind other */
+
+  /* ── Semantic Borders ──────────────────────────────────── */
+  --border-component:      1px solid var(--border-default);
+  --border-component-strong: 1px solid var(--border-strong);
+  --border-component-inverse: 1px solid var(--border-inverse);
+  --border-accent:         1px solid var(--slate-ice-blue);
+
+  /* ── Focus Ring ────────────────────────────────────────── */
+  --focus-ring-width:   2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color:  var(--slate-ice-blue);
+  --focus-ring:        var(--focus-ring-width) solid var(--focus-ring-color);
+
+  /* ── Divider ───────────────────────────────────────────── */
+  --divider-light:   1px solid var(--border-default);
+  --divider-strong:  1px solid var(--border-strong);
+  --divider-inverse: 1px solid var(--border-inverse);
+}
